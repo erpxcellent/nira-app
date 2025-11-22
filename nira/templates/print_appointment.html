@@ -6,67 +6,67 @@
             <div class="voucher-brand">
                 <div class="brand-mark">NIRA</div>
                 <div class="voucher-meta">
-                    <p class="eyebrow text-uppercase mb-1">Appointment</p>
+                    <p class="eyebrow text-uppercase mb-1">Ballan</p>
                     <h2 class="voucher-name mb-1">{{ appointment.full_name }}</h2>
-                    <p class="helper subtle mb-0">Code: {{ appointment.confirmation_code }}</p>
+                    <p class="helper subtle mb-0">Koodh: {{ appointment.confirmation_code }}</p>
                 </div>
             </div>
             <div class="voucher-status">
-                <span class="stamp success">VALID</span>
+                <span class="stamp success">ANSAX</span>
             </div>
         </header>
 
         <main class="voucher-body">
             <div class="voucher-grid">
                 <div>
-                    <span class="dt-label">Visit</span>
+                    <span class="dt-label">Taariikhda booqashada</span>
                     <p class="dt-value big">{{ appointment.visit_date.strftime('%b %d, %Y') }}</p>
                 </div>
                 <div>
-                    <span class="dt-label">Purpose</span>
+                    <span class="dt-label">Ujeeddo</span>
                     <p class="dt-value">{{ appointment.visit_reason or 'N/A' }}</p>
                 </div>
                 <div>
-                    <span class="dt-label">Time</span>
-                    <p class="dt-value">{{ appointment.preferred_time or 'Any' }}</p>
+                    <span class="dt-label">Waqti</span>
+                    <p class="dt-value">{{ appointment.preferred_time or 'Waqti kasta' }}</p>
                 </div>
                 <div>
-                    <span class="dt-label">District</span>
+                    <span class="dt-label">Degmo</span>
                     <p class="dt-value">{{ appointment.district }}</p>
                 </div>
                 <div>
-                    <span class="dt-label">Date of birth</span>
+                    <span class="dt-label">Dhalasho</span>
                     <p class="dt-value">{{ appointment.date_of_birth.strftime('%b %d, %Y') }}</p>
                 </div>
                 <div>
-                    <span class="dt-label">Phone</span>
+                    <span class="dt-label">Telefoon</span>
                     <p class="dt-value">{{ appointment.phone }}</p>
                 </div>
                 <div class="notes-block wide">
-                    <span class="dt-label">Notes</span>
-                    <p class="dt-notes mb-0">{{ appointment.notes or 'None provided' }}</p>
+                    <span class="dt-label">Faahfaahin</span>
+                    <p class="dt-notes mb-0">{{ appointment.notes or 'Lama sheegin' }}</p>
                 </div>
             </div>
 
             <div class="voucher-qr">
                 <div class="voucher-qr-text">
-                    <p class="eyebrow text-uppercase mb-1">Verify</p>
+                    <p class="eyebrow text-uppercase mb-1">Hubi</p>
                     <p class="helper mb-0">
-                        Scan this code to confirm authenticity in the NIRA system.
+                        Sawir koodhkan si aad ugu xaqiijiso nidaamka NIRA.
                     </p>
                 </div>
                 <div class="qr-img small">
                     <img
                         src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data={{ verify_url|urlencode }}"
-                        alt="Appointment verification QR code">
+                        alt="Koodhka hubinta ballanta">
                 </div>
             </div>
         </main>
 
         <footer class="voucher-actions no-print">
-            <a class="ghost-btn slim" href="{{ url_for('appointments.landing') }}">Back</a>
+            <a class="ghost-btn slim" href="{{ url_for('appointments.landing') }}">Laabo</a>
             <button class="primary-btn" type="button" onclick="window.print()">
-                Print / Save PDF
+                Daabac / Kaydi PDF
             </button>
         </footer>
     </div>

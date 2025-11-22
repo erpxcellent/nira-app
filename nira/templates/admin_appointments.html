@@ -4,20 +4,20 @@
 
     <div class="status-ribbon luxe">
         <div class="stat">
-            <span class="stat-label">Date</span>
+            <span class="stat-label">Taariikh</span>
             <span class="stat-value">{{ visit_date.strftime('%b %d, %Y') }}
-                <span class="chip">{{ appointments|length }} appointments</span> </span>
+                <span class="chip">{{ appointments|length }} ballan</span> </span>
         </div>
         <div class="stat right">
-            <a class="ghost-btn slim white" href="{{ url_for('appointments.admin_appointments') }}">Back to dates</a>
+            <a class="ghost-btn slim white" href="{{ url_for('appointments.admin_appointments') }}">Ku laabo taariikhaha</a>
         </div>
     </div>
 
     <div class="form-slab glow">
         <div class="slab-header">
-            <p class="eyebrow">Appointments</p>
+            <p class="eyebrow">Ballamaha</p>
             <h1>{{ visit_date.strftime('%A') }}</h1>
-            <p class="lede">Click a row to view and print the voucher.</p>
+            <p class="lede">Guji saf kasta si aad u aragto oo aad u daabacdo warqadda.</p>
         </div>
 
         <div class="admin-layout">
@@ -26,10 +26,10 @@
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Phone</th>
-                            <th>District</th>
-                            <th>Purpose</th>
+                            <th>Magac</th>
+                            <th>Telefoon</th>
+                            <th>Degmo</th>
+                            <th>Ujeeddo</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -57,7 +57,7 @@
                             <td class="cell-action">
                                 <a class="ghost-btn slim print-link"
                                     href="{{ url_for('appointments.print_appointment', code=a.confirmation_code) }}"
-                                    target="_blank">Print</a>
+                                    target="_blank">Daabac</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -67,16 +67,16 @@
 
             <!-- DETAIL SIDE -->
             <div class="detail-card" id="detail-card">
-                <p class="eyebrow">Details</p>
-                <h3 id="detail-name">Select a row</h3>
+                <p class="eyebrow">Faahfaahin</p>
+                <h3 id="detail-name">Dooro saf</h3>
 
                 <div class="detail-grid">
                     <div>
-                        <span class="dt-label">Mother</span>
+                        <span class="dt-label">Magaca hooyo</span>
                         <span class="dt-value" id="detail-mother">—</span>
                     </div>
                     <div>
-                        <span class="dt-label">Phone</span>
+                        <span class="dt-label">Telefoon</span>
                         <span class="dt-value" id="detail-phone">—</span>
                     </div>
                     <div>
@@ -84,29 +84,29 @@
                         <span class="dt-value" id="detail-email">—</span>
                     </div>
                     <div>
-                        <span class="dt-label">District</span>
+                        <span class="dt-label">Degmo</span>
                         <span class="dt-value" id="detail-district">—</span>
                     </div>
                     <div>
-                        <span class="dt-label">DOB</span>
+                        <span class="dt-label">Dhalasho</span>
                         <span class="dt-value" id="detail-dob">—</span>
                     </div>
                     <div>
-                        <span class="dt-label">Preferred time</span>
+                        <span class="dt-label">Waqti la doorbido</span>
                         <span class="dt-value" id="detail-time">—</span>
                     </div>
                     <div>
-                        <span class="dt-label">Purpose</span>
+                        <span class="dt-label">Ujeeddo</span>
                         <span class="dt-value" id="detail-reason">—</span>
                     </div>
                     <div class="notes-block">
-                        <span class="dt-label">Notes</span>
+                        <span class="dt-label">Xusuus</span>
                         <p class="dt-notes" id="detail-notes">—</p>
                     </div>
                 </div>
                 <br><br>
                 <div class="">
-                    <a class="primary-btn full" id="detail-print" href="#" target="_blank">Print voucher</a>
+                    <a class="primary-btn full" id="detail-print" href="#" target="_blank">Daabac warqad</a>
                 </div>
             </div>
         </div>

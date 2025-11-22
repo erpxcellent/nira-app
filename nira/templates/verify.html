@@ -6,44 +6,44 @@
         <div class="ticket-head">
             <div class="brand-mark">NIRA</div>
             <div>
-                <p class="eyebrow">Verified</p>
+                <p class="eyebrow">La xaqiijiyay</p>
                 <h2>{{ appointment.full_name }}</h2>
-                <p class="helper subtle">Code: {{ appointment.confirmation_code }}</p>
+                <p class="helper subtle">Koodh: {{ appointment.confirmation_code }}</p>
             </div>
-            <div class="stamp success">Valid</div>
+            <div class="stamp success">Ansax</div>
         </div>
         <div class="ticket-grid">
             <div>
-                <span class="dt-label">Visit</span>
+                <span class="dt-label">Taariikhda booqashada</span>
                 <p class="dt-value">{{ appointment.visit_date.strftime('%b %d, %Y') }}</p>
             </div>
             <div>
-                <span class="dt-label">District</span>
+                <span class="dt-label">Degmo</span>
                 <p class="dt-value">{{ appointment.district }}</p>
             </div>
             <div>
-                <span class="dt-label">Purpose</span>
+                <span class="dt-label">Ujeeddo</span>
                 <p class="dt-value">{{ appointment.visit_reason or 'N/A' }}</p>
             </div>
             <div>
-                <span class="dt-label">Phone</span>
+                <span class="dt-label">Telefoon</span>
                 <p class="dt-value">{{ appointment.phone }}</p>
             </div>
         </div>
-        <p class="helper subtle accept-text">Appointment is authentic.</p>
+        <p class="helper subtle accept-text">Ballantan waa sax oo la aqbalay.</p>
     </div>
     {% else %}
     <div class="ticket-card small invalid">
         <div class="ticket-head">
             <div class="brand-mark">NIRA</div>
             <div>
-                <p class="eyebrow">Verification failed</p>
-                <h2>Not found</h2>
-                <p class="helper subtle">Code: {{ code }}</p>
+                <p class="eyebrow">Xaqiijintu way guuldareysatay</p>
+                <h2>Lama helin</h2>
+                <p class="helper subtle">Koodh: {{ code }}</p>
             </div>
-            <div class="stamp danger">Invalid</div>
+            <div class="stamp danger">Aan sax ahayn</div>
         </div>
-        <p class="helper">We could not find an appointment for this code. Please re-scan or contact support.</p>
+        <p class="helper">Koodhkan laguma helin ballan. Fadlan dib u iskaani ama nala soo xiriir.</p>
     </div>
     {% endif %}
 </section>

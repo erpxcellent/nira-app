@@ -29,11 +29,11 @@
 
         if (!selectedLabel) return;
         if (!dateStr) {
-            selectedLabel.textContent = "No dates open right now.";
+            selectedLabel.textContent = "Ma jiraan taariikho bannaan hadda.";
             return;
         }
         const dateObj = toDate(dateStr);
-        selectedLabel.textContent = `Selected: ${longDate.format(dateObj)}`;
+        selectedLabel.textContent = `Taariikhda la doortay: ${longDate.format(dateObj)}`;
     };
 
     const renderCards = () => {
@@ -43,7 +43,7 @@
         if (!currentAvailability.length) {
             const empty = document.createElement("p");
             empty.className = "empty-state";
-            empty.textContent = `All dates in the current window are booked (limit ${dailyLimit} per day). Please check again soon.`;
+            empty.textContent = `Taariikhaha daaqaddan dhammaantood waa buuxeen (xadka waa ${dailyLimit} maalintii). Fadlan dib u soo hubi.`; 
             cardsWrap.appendChild(empty);
             setSelected(null);
             return;
@@ -82,8 +82,8 @@
             meta.className = "availability-meta";
             const spotsEl = document.createElement("span");
             spotsEl.className = "spots";
-            const plural = slot.remaining === 1 ? "spot" : "spots";
-            spotsEl.textContent = slot.remaining === 0 ? "Full" : `${slot.remaining} ${plural} left`;
+            const plural = slot.remaining === 1 ? "boos" : "boos";
+            spotsEl.textContent = slot.remaining === 0 ? "Buuxsamay" : `${slot.remaining} ${plural} haray`;
             meta.appendChild(spotsEl);
 
             card.appendChild(dateBlock);

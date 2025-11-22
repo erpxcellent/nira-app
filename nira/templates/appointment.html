@@ -7,76 +7,75 @@
 <section class="page-stack container py-4">
     <div class="status-ribbon mb-3">
         <div class="stat">
-            <span class="stat-label">Daily capacity</span>
+            <span class="stat-label">Xadka maalinlaha ah</span>
             <span class="stat-value">{{ daily_limit }}
-                <span class="chip">per day</span></span>
+                <span class="chip">maalintii</span></span>
         </div>
         <div class="stat">
-            <span class="stat-label">Open dates</span>
+            <span class="stat-label">Taariikho bannaan</span>
             <span class="stat-value">{{ available_dates|length }}
-                <span class="chip success">Live</span></span>
+                <span class="chip success">Maalmood</span></span>
         </div>
         <div class="stat">
-            <span class="stat-label">Experience</span>
-            <span class="stat-value">Personal Guide and welcome</span>
+            <span class="stat-label">Khibrad</span>
+            <span class="stat-value">Hagitaan iyo soo dhawayn</span>
         </div>
     </div>
 
     <div class="form-slab glow p-3 p-md-4 rounded shadow-sm border-0 bg-white" id="booking">
         <div class="slab-header mb-3">
-            <p class="eyebrow">NIRA visit</p>
-            <h1>Book your identification slot</h1>
-            <p class="lede">Complete the essentials, pick a date, and we will welcome you with the same calm energy as
-                Oasis Cancer Hospital. {{ daily_limit }} visitors per day keeps queues minimal.</p>
+            <p class="eyebrow">Booqashada NIRA</p>
+            <h1>Buuxi ballanta aqoonsiga</h1>
+            <p class="lede">Buuxi macluumaadkaaga si balan aad u qabsatid.</p>
             <div class="step-line">
                 <span class="step-dot active"></span>
                 <span class="step-dot"></span>
                 <span class="step-dot"></span>
-                <span class="step-caption">Details → Date → Confirm</span>
+                <span class="step-caption">Faahfaahin → Taariikh → Xaqiiji</span>
             </div>
             <div class="floating-pills">
-                <span class="pill gold">Warm welcome</span>
-                <span class="pill outline">Short queues</span>
-                <span class="pill outline">Concierge help</span>
+                <span class="pill gold">Soo dhawayn diirran</span>
+                <span class="pill outline">Safar kooban</span>
+                <span class="pill outline">Kaaliyeyaal kuu diyaarsan</span>
             </div>
         </div>
         <form method="post" class="booking-form compact">
             <div class="form-row split">
                 <div>
-                    <label for="full_name">Full name*</label>
-                    <input type="text" name="full_name" id="full_name" required placeholder="Full name"
+                    <label for="full_name">Magaca oo dhammaystiran*</label>
+                    <input type="text" name="full_name" id="full_name" required placeholder="Magacaaga"
                         autocomplete="name" value="{{ form_values.get('full_name','') }}">
                 </div>
                 <div>
-                    <label for="mother_full_name">Mother's full name*</label>
+                    <label for="mother_full_name">Magaca hooyo*</label>
                     <input type="text" name="mother_full_name" id="mother_full_name" required
-                        placeholder="Mother's full name" value="{{ form_values.get('mother_full_name','') }}">
+                        placeholder="Magaca hooyo" value="{{ form_values.get('mother_full_name','') }}">
                 </div>
             </div>
             <div class="form-row split">
                 <div>
-                    <label for="phone">Phone number*</label>
+                    <label for="phone">Lambarka telefoonka*</label>
                     <input type="tel" name="phone" id="phone" required placeholder="+252 61 0000000"
                         autocomplete="tel" value="{{ form_values.get('phone','') }}">
                 </div>
                 <div>
-                    <label for="email">Email (optional)</label>
-                    <input type="email" name="email" id="email" placeholder="you@example.com" autocomplete="email"
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="adiga@example.com" autocomplete="email"
                         value="{{ form_values.get('email','') }}">
                 </div>
             </div>
             <div class="form-row split">
                 <div>
-                    <label for="district">District* (Mogadishu)</label>
+                    <label for="district">Degmada* (Muqdisho)</label>
                     <select name="district" id="district" required>
-                        <option value="" disabled {% if not form_values.get('district') %}selected{% endif %}>Select your district</option>
+                        <option value="" disabled {% if not form_values.get('district') %}selected{% endif %}>Dooro degmadaada</option>
                         {% for d in districts %}
                         <option value="{{ d }}" {% if form_values.get('district') == d %}selected{% endif %}>{{ d }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div>
-                    <label for="date_of_birth">Date of birth*</label>
+                    <label for="date_of_birth">Taariikhda dhalashada*</label>
                     <input class="form-control datepicker active" type="text" name="date_of_birth" id="date_of_birth"
                         readonly placeholder="dd / mm / yyyy" required
                         value="{{ form_values.get('date_of_birth','') }}">
@@ -84,12 +83,12 @@
             </div>
             <div class="form-row split">
                 <div>
-                    <label for="national_id">National ID / Passport (optional)</label>
-                    <input type="text" name="national_id" id="national_id" placeholder="ID or passport number"
+                    <label for="national_id">Lambarka aqoonsiga / baasaboorka</label>
+                    <input type="text" name="national_id" id="national_id" placeholder="Lambarka aqoonsiga"
                         value="{{ form_values.get('national_id','') }}">
                 </div>
                 <div class="d-none">
-                    <label for="preferred_time">Preferred time</label>
+                    <label for="preferred_time">Waqtiga aad rabto</label>
                     <select name="preferred_time" id="preferred_time">
                         <option {% if form_values.get('preferred_time','Day Shift') == 'Day Shift' %}selected{% endif %}>Day Shift</option>
                         <option disabled {% if form_values.get('preferred_time') == 'Night Shift' %}selected{% endif %}>Night Shift</option>
@@ -97,23 +96,23 @@
                 </div>
             </div>
             <div class="form-row">
-                <label for="visit_reason">Purpose of visit*</label>
+                <label for="visit_reason">Ujeeddada booqashada*</label>
                 <select name="visit_reason" id="visit_reason" required>
                     {% set reason = form_values.get('visit_reason','New ID registration') %}
-                    <option value="New ID registration" {% if reason == 'New ID registration' %}selected{% endif %}>New ID registration</option>
-                    <option value="ID replacement" {% if reason == 'ID replacement' %}selected{% endif %}>ID replacement</option>
-                    <option value="Update personal details" {% if reason == 'Update personal details' %}selected{% endif %}>Update personal details</option>
-                    <option value="Collect prepared ID" {% if reason == 'Collect prepared ID' %}selected{% endif %}>Collect prepared ID</option>
-                    <option value="Other" {% if reason == 'Other' %}selected{% endif %}>Other</option>
+                    <option value="New ID registration" {% if reason == 'New ID registration' %}selected{% endif %}>Diiwaangelinta aqoonsiga cusub</option>
+                    <option value="ID replacement" {% if reason == 'ID replacement' %}selected{% endif %}>Bedelidda aqoonsiga</option>
+                    <option value="Update personal details" {% if reason == 'Update personal details' %}selected{% endif %}>Cusboonaysiinta xogta</option>
+                    <option value="Collect prepared ID" {% if reason == 'Collect prepared ID' %}selected{% endif %}>Qaado aqoonsiga diyaarka ah</option>
+                    <option value="Other" {% if reason == 'Other' %}selected{% endif %}>Sabab kale</option>
                 </select>
             </div>
             <div class="form-row">
                 <div class="form-row header-line">
                     <div>
-                        <label>Select your date*</label>
-                        <p class="helper">Tap a date card. When {{ daily_limit }} fill, that date closes.</p>
+                        <label>Dooro taariikhdaada*</label>
+                        <p class="helper">Taabo kaarka taariikhda. Marka {{ daily_limit }} qof buuxaan, taariikhdu way xirmaysaa.</p>
                     </div>
-                    <button class="ghost-btn slim" id="refresh-availability">Refresh</button>
+                    <button class="ghost-btn slim" id="refresh-availability">Cusbooneysii</button>
                 </div>
                 <input type="hidden" name="visit_date" id="visit_date" required value="{{ form_values.get('visit_date','') }}">
                 <div class="availability-grid selection-grid" id="availability-cards">
@@ -122,41 +121,41 @@
                 <p class="helper subtle" id="selected-date-label"></p>
             </div>
             <div class="form-row">
-                <label for="notes">Anything we should know?</label>
+                <label for="notes">Ma jiraan wax kale oo aan ogaano?</label>
                 <textarea name="notes" id="notes" rows="3"
-                    placeholder="Accessibility needs, who accompanies you, or other context.">{{ form_values.get('notes','') }}</textarea>
+                    placeholder="Baahida gaarka ah, qof ku wehlinaya, iwm.">{{ form_values.get('notes','') }}</textarea>
             </div>
             <div class="form-actions">
                 <button type="submit" class="primary-btn" id="book-button">
-                    Confirm visit
+                    Xaqiiji booqashada
                 </button>
-                <p class="helper subtle">You will see a confirmation; we may contact you if we need clarifications.</p>
+                <p class="helper subtle">Waxaad arki doontaa xaqiijin; haddii aan u baahanno faahfaahin waxaan kula soo xiriiri doonaa.</p>
             </div>
         </form>
     </div>
 
     <div class="info-grid mt-3">
         <div class="info-card">
-            <p class="eyebrow">Arrival</p>
-            <p class="info-title">Be 10 minutes early</p>
-            <p class="helper">We keep lines short; arriving a bit early keeps your visit smooth.</p>
+            <p class="eyebrow">Imaatinka</p>
+            <p class="info-title">Soo gaar 10 daqiiqo ka hor</p>
+            <p class="helper">Safafka waa gaaban yihiin; imaatinka hore wuxuu dedejiyaa adeegga.</p>
         </div>
         <div class="info-card">
-            <p class="eyebrow">Documents</p>
-            <p class="info-title">Bring current ID & proof</p>
-            <p class="helper">Carry any ID you have plus supporting papers to speed verification.</p>
+            <p class="eyebrow">Dukumiintiyada</p>
+            <p class="info-title">Keen aqoonsiga iyo caddeymaha</p>
+            <p class="helper">Keen wixii aqoonsi iyo waraaqo taageeraya ah si loo dedejiyo hubinta.</p>
         </div>
         <div class="info-card">
-            <p class="eyebrow">Support</p>
-            <p class="info-title">Tell us your needs</p>
-            <p class="helper">Add accessibility or timing notes; our team will prepare in advance.</p>
+            <p class="eyebrow">Taageero</p>
+            <p class="info-title">Noo sheeg baahidaada</p>
+            <p class="helper">Qor baahida gaarka ah ama waqtiga aad jeceshahay; kooxdeennu way diyaar garoobi doontaa.</p>
         </div>
     </div>
 
     <div class="support-bar">
         <div>
-            <p class="eyebrow">Need help?</p>
-            <p class="helper">Call our desk at 161 or email care@nira.gov for quick assistance.</p>
+            <p class="eyebrow">Ma u baahan tahay kaalmo?</p>
+            <p class="helper">Wac 161 ama u qor care@nira.gov si degdeg ah.</p>
         </div>
         <div class="sparkle"></div>
     </div>

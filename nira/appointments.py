@@ -15,24 +15,24 @@ from nira.config import Config
 from nira.models import Appointment
 
 MOGADISHU_DISTRICTS = [
-    "Abdiaziz",
-    "Bondhere",
+    "Cabdicasiis",
+    "Boondheere",
     "Dayniile",
     "Dharkenley",
-    "Garasbaley",
-    "Hamar Jajab",
-    "Hamar Weyne",
-    "Hawle Wadaag",
+    "Garasbaaleey",
+    "Xamar Jajab",
+    "Xamar Weyne",
+    "Hawl Wadaag",
     "Hodan",
-    "Kaaran",
-    "Kahda",
-    "Shangani",
+    "Kaaraan",
+    "Kaxda",
+    "Shangaani",
     "Shibis",
     "Wadajir",
     "Waberi",
     "Wardhiigley",
-    "Yaqshid",
-    "Other",
+    "Yaaqshiid",
+    "Degmo Kale",
 ]
 
 appointments_bp = Blueprint("appointments", __name__)
@@ -93,26 +93,26 @@ def landing():
 
         validation_errors = []
         if not full_name:
-            validation_errors.append("Please add your full name so we can reserve your slot.")
+            validation_errors.append("Fadlan geli magacaaga oo buuxa si aan boos kuu diyaarinno.")
         if not mother_full_name:
-            validation_errors.append("Add your mother's full name for identification.")
+            validation_errors.append("Ku qor magaca hooyo si loo aqoonsado.")
         if not phone:
-            validation_errors.append("Phone number is required so we can reach you.")
+            validation_errors.append("Telefoon waa qasab si aan kula soo xirirno.")
         if not district:
-            validation_errors.append("District is required.")
+            validation_errors.append("Degmo waa in la doortaa.")
         if not date_of_birth:
-            validation_errors.append("Please provide your date of birth.")
+            validation_errors.append("Fadlan geli taariikhda dhalashada.")
         if not visit_reason:
-            validation_errors.append("Tell us your purpose to personalize support.")
+            validation_errors.append("Nala wadaag ujeeddada booqashada.")
         if not visit_date or visit_date not in valid_dates:
-            validation_errors.append("That date is not available anymore. Please pick another day.")
+            validation_errors.append("Taariikhdaas hadda lama heli karo. Door mid kale.")
 
         if validation_errors:
             flash(validation_errors[0], "error")
         else:
             taken = Appointment.slots_taken(visit_date)
             if taken >= limit:
-                flash("That day just filled up. Please choose another date.", "error")
+                flash("Taariikhdaas ayaa buuxsantay. Fadlan door mid kale.", "error")
             else:
                 confirmation_code = uuid.uuid4().hex
                 appointment = Appointment(
@@ -188,10 +188,10 @@ def admin_login():
         if username == "admin" and password == "admin@123":
             session.pop("_flashes", None)
             session["admin_logged_in"] = True
-            flash("Welcome back, Admin.", "success")
+            flash("Ku soo dhowow mar kale, Maamulaha.", "success")
             return redirect(url_for("appointments.admin_appointments"))
         else:
-            flash("Invalid credentials. Try again.", "error")
+            flash("Magaca ama furaha waa khaldan. Fadlan isku day mar kale.", "error")
 
     return render_template("admin_login.html")
 
@@ -199,7 +199,7 @@ def admin_login():
 @appointments_bp.route("/admin/logout")
 def admin_logout():
     session.pop("admin_logged_in", None)
-    flash("Logged out.", "success")
+    flash("Waad ka baxday.", "success")
     return redirect(url_for("appointments.admin_login"))
 
 
@@ -235,7 +235,7 @@ def admin_appointments_by_date(date_str):
     try:
         visit_date = date.fromisoformat(date_str)
     except Exception:
-        flash("Invalid date.", "error")
+        flash("Taariikh sax ah ma ahayn.", "error")
         return redirect(url_for("appointments.admin_appointments"))
 
     appointments = (

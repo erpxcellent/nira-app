@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login · NIRA</title>
+    <title>Galka Maamulaha · NIRA</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
 
         <a href="{{ url_for('appointments.landing') }}" class="btn btn-light shadow-sm rounded-pill px-4 py-2 mb-3"
             style="font-weight: 600; border: 1px solid #e3d5b8;">
-            ← Back to public page
+            ← Ku laabo bogga dadweynaha
         </a>
 
         <!-- Flash messages -->
@@ -54,8 +54,8 @@
                 <!-- Header -->
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div>
-                        <p class="eyebrow text-uppercase text-muted mb-1 small">Admin access</p>
-                        <h1 class="mb-0 h4">View appointments</h1>
+                        <p class="eyebrow text-uppercase text-muted mb-1 small">Gelitaanka maamulka</p>
+                        <h1 class="mb-0 h4">Eeg ballamaha</h1>
                     </div>
                     <div class="brand-mark d-flex align-items-center justify-content-center rounded-circle">
                         NIRA
@@ -63,25 +63,25 @@
                 </div>
 
                 <p class="text-muted small mb-4">
-                    Use your admin credentials to access the appointment dashboard.
+                    Ku qor macluumaadka maamulka si aad u gasho guddiga ballamaha.
                 </p>
 
                 <!-- Form -->
                 <form method="post" class="login-form">
                     <div class="mb-3">
-                        <label class="form-label" for="username">Username</label>
+                        <label class="form-label" for="username">Magaca isticmaalaha</label>
                         <input type="text" class="form-control rounded-3" name="username" id="username" required
-                            placeholder="Username">
+                            placeholder="Magaca isticmaalaha">
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label" for="password">Password</label>
+                        <label class="form-label" for="password">Furaha sirta ah</label>
                         <input type="password" class="form-control rounded-3" name="password" id="password" required
-                            placeholder="Password">
+                            placeholder="Furaha sirta ah">
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 rounded-3 py-2 primary-btn">
-                        Enter dashboard
+                        Gali guddiga
                     </button>
                 </form>
             </div>

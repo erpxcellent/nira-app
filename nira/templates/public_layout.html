@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% if title %}
-    <title>{{ title }} · NIRA Visits</title>
+    <title>{{ title }} · Booqashooyinka NIRA</title>
     {% else %}
-    <title>NIRA Visits</title>
+    <title>Booqashooyinka NIRA</title>
     {% endif %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,14 +25,13 @@
         <div class="brand">
             <div class="brand-mark">NIRA</div>
             <div class="brand-text">
-                <span class="kicker">Welcome to oasis cancer hospital</span>
-                <span class="title">National Identification Registration Authority</span>
+                <span class="kicker">Ku soo dhowow Cisbitaalka Oasis</span>
+                <span class="title">Hay'adda Diiwaangelinta Aqoonsiga Qaranka</span>
             </div>
         </div>
         <div class="top-actions">
-            <span class="tag">{{ daily_limit if daily_limit is defined else 20 }} visits per day</span>
-            <a class="top-link" href="{{ url_for('appointments.landing') }}">Home</a>
-            <a class="top-link" href="{{ url_for('appointments.admin_login') }}">Login as admin</a>
+            <span class="tag">{{ daily_limit if daily_limit is defined else 20 }} booqasho maalintii</span>
+            <a class="top-link" href="{{ url_for('appointments.admin_login') }}"> Maamul</a>
         </div>
     </header>
     {% endif %}
@@ -50,7 +49,7 @@
     </main>
     {% if request.endpoint not in ['appointments.print_appointment', 'appointments.verify_appointment'] %}
     <footer class="footer">
-        <p>Guided by the calm care of Oasis Cancer Hospital — delivering a smooth NIRA visit experience.</p>
+        <p>Waxaan ku hagnaa daryeel deggan oo ka socda Cisbitaalka Oasis — si aanu u fududeyno khibradda booqashada NIRA.</p>
     </footer>
     {% endif %}
     <script src="{{ url_for('static', filename='js/availability.js') }}"></script>
