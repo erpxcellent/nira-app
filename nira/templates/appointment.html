@@ -1,5 +1,9 @@
 {% extends "public_layout.html" %}
 {% block content %}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+
 <section class="page-stack container py-4">
     <div class="status-ribbon mb-3">
         <div class="stat">
@@ -41,60 +45,66 @@
                 <div>
                     <label for="full_name">Full name*</label>
                     <input type="text" name="full_name" id="full_name" required placeholder="Full name"
-                        autocomplete="name">
+                        autocomplete="name" value="{{ form_values.get('full_name','') }}">
                 </div>
                 <div>
                     <label for="mother_full_name">Mother's full name*</label>
                     <input type="text" name="mother_full_name" id="mother_full_name" required
-                        placeholder="Mother's full name">
+                        placeholder="Mother's full name" value="{{ form_values.get('mother_full_name','') }}">
                 </div>
             </div>
             <div class="form-row split">
                 <div>
                     <label for="phone">Phone number*</label>
-                    <input type="tel" name="phone" id="phone" required placeholder="+252 61 0000000" autocomplete="tel">
+                    <input type="tel" name="phone" id="phone" required placeholder="+252 61 0000000"
+                        autocomplete="tel" value="{{ form_values.get('phone','') }}">
                 </div>
                 <div>
                     <label for="email">Email (optional)</label>
-                    <input type="email" name="email" id="email" placeholder="you@example.com" autocomplete="email">
+                    <input type="email" name="email" id="email" placeholder="you@example.com" autocomplete="email"
+                        value="{{ form_values.get('email','') }}">
                 </div>
             </div>
             <div class="form-row split">
                 <div>
                     <label for="district">District* (Mogadishu)</label>
                     <select name="district" id="district" required>
-                        <option value="" disabled selected>Select your district</option>
+                        <option value="" disabled {% if not form_values.get('district') %}selected{% endif %}>Select your district</option>
                         {% for d in districts %}
-                        <option value="{{ d }}">{{ d }}</option>
+                        <option value="{{ d }}" {% if form_values.get('district') == d %}selected{% endif %}>{{ d }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div>
                     <label for="date_of_birth">Date of birth*</label>
-                    <input type="date" name="date_of_birth" id="date_of_birth" required>
+                    <input class="form-control datepicker active" type="text" name="date_of_birth" id="date_of_birth"
+                        readonly placeholder="dd / mm / yyyy" required
+                        value="{{ form_values.get('date_of_birth','') }}">
                 </div>
             </div>
             <div class="form-row split">
                 <div>
                     <label for="national_id">National ID / Passport (optional)</label>
-                    <input type="text" name="national_id" id="national_id" placeholder="ID or passport number">
+                    <input type="text" name="national_id" id="national_id" placeholder="ID or passport number"
+                        value="{{ form_values.get('national_id','') }}">
                 </div>
                 <div class="d-none">
                     <label for="preferred_time">Preferred time</label>
                     <select name="preferred_time" id="preferred_time">
-                        <option>Day Shift</option>
-                        <option disabled>Night Shift</option>
+                        <option {% if form_values.get('preferred_time','Day Shift') == 'Day Shift' %}selected{% endif %}>Day Shift</option>
+                        <option disabled {% if form_values.get('preferred_time') == 'Night Shift' %}selected{% endif %}>Night Shift</option>
                     </select>
                 </div>
             </div>
             <div class="form-row">
                 <label for="visit_reason">Purpose of visit*</label>
                 <select name="visit_reason" id="visit_reason" required>
-                    <option selected>New ID registration</option>
-                    <option>ID replacement</option>
-                    <option>Update personal details</option>
-                    <option>Collect prepared ID</option>
-                    <option>Other</option>
+                    {% set reason = form_values.get('visit_reason','New ID registration') %}
+                    <option value="New ID registration" {% if reason == 'New ID registration' %}selected{% endif %}>New ID registration</option>
+                    <option value="ID replacement" {% if reason == 'ID replacement' %}selected{% endif %}>ID replacement</option>
+                    <option value="Update personal details" {% if reason == 'Update personal details' %}selected{% endif %}>Update personal details</option>
+                    <option value="Collect prepared ID" {% if reason == 'Collect prepared ID' %}selected{% endif %}>Collect prepared ID</option>
+                    <option value="Other" {% if reason == 'Other' %}selected{% endif %}>Other</option>
                 </select>
             </div>
             <div class="form-row">
@@ -105,7 +115,7 @@
                     </div>
                     <button class="ghost-btn slim" id="refresh-availability">Refresh</button>
                 </div>
-                <input type="hidden" name="visit_date" id="visit_date" required>
+                <input type="hidden" name="visit_date" id="visit_date" required value="{{ form_values.get('visit_date','') }}">
                 <div class="availability-grid selection-grid" id="availability-cards">
                     <!-- populated by JS -->
                 </div>
@@ -114,7 +124,7 @@
             <div class="form-row">
                 <label for="notes">Anything we should know?</label>
                 <textarea name="notes" id="notes" rows="3"
-                    placeholder="Accessibility needs, who accompanies you, or other context."></textarea>
+                    placeholder="Accessibility needs, who accompanies you, or other context.">{{ form_values.get('notes','') }}</textarea>
             </div>
             <div class="form-actions">
                 <button type="submit" class="primary-btn" id="book-button">
@@ -152,7 +162,14 @@
     </div>
 </section>
 
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
 <script>
+    $(function () {
+        $(".datepicker").datepicker({
+            dateFormat: "dd/mm/yy"
+        });
+    });
     window.initialAvailability = {{ availability_payload | tojson }};
     window.dailyLimit = {{ daily_limit }};
 </script>

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from flask import (
     Blueprint,
     jsonify,
@@ -62,8 +62,10 @@ def landing():
     limit = Config.DAILY_APPOINTMENT_LIMIT
     available_dates = get_available_dates()
     full_window = get_all_dates_with_remaining()
+    form_values = {}
 
     if request.method == "POST":
+        form_values = request.form.to_dict()
         full_name = request.form.get("full_name", "").strip()
         mother_full_name = request.form.get("mother_full_name", "").strip()
         email = request.form.get("email", "").strip() or None
@@ -75,7 +77,6 @@ def landing():
         visit_reason = request.form.get("visit_reason", "").strip() or None
         notes = request.form.get("notes", "").strip() or None
         visit_date_raw = request.form.get("visit_date")
-
         try:
             visit_date = date.fromisoformat(visit_date_raw)
         except Exception:
@@ -84,7 +85,9 @@ def landing():
         try:
             date_of_birth = date.fromisoformat(dob_raw)
         except Exception:
-            date_of_birth = None
+            date_of_birth = None        
+        
+        date_of_birth = convert_strdate_to_datetime(dob_raw)
 
         valid_dates = {d["date"] for d in available_dates}
 
@@ -147,6 +150,7 @@ def landing():
         availability_payload=[
             {"date": d["date"].isoformat(), "remaining": d["remaining"]} for d in full_window
         ],
+        form_values=form_values,
         districts=MOGADISHU_DISTRICTS,
     )
 
@@ -267,3 +271,18 @@ def verify_appointment():
         appointment=appointment,
         code=code,
     )
+
+
+
+
+
+
+def convert_strdate_to_datetime(str_date):
+    if not str_date:
+        return None
+    for fmt in ('%d/%m/%Y', '%Y-%m-%d'):
+        try:
+            return datetime.strptime(str_date, fmt).date()
+        except (ValueError, TypeError):
+            continue
+    return None

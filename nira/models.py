@@ -48,3 +48,4 @@ class Appointment(db.Model):
             if include_full or remaining > 0:
                 available.append({"date": visit_day, "remaining": remaining})
         return available
+
