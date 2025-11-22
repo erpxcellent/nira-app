@@ -1,0 +1,161 @@
+{% extends "public_layout.html" %}
+{% block content %}
+<section class="page-stack container py-4">
+    <div class="status-ribbon mb-3">
+        <div class="stat">
+            <span class="stat-label">Daily capacity</span>
+            <span class="stat-value">{{ daily_limit }}</span>
+            <span class="chip">per day</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Open dates</span>
+            <span class="stat-value">{{ available_dates|length }}</span>
+            <span class="chip success">Live</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Experience</span>
+            <span class="stat-value">Personal Guide and welcome</span>
+        </div>
+    </div>
+
+    <div class="form-slab glow p-3 p-md-4 rounded shadow-sm border-0 bg-white" id="booking">
+        <div class="slab-header mb-3">
+            <p class="eyebrow">NIRA visit</p>
+            <h1>Book your identification slot</h1>
+            <p class="lede">Complete the essentials, pick a date, and we will welcome you with the same calm energy as
+                Oasis Cancer Hospital. {{ daily_limit }} visitors per day keeps queues minimal.</p>
+            <div class="step-line">
+                <span class="step-dot active"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
+                <span class="step-caption">Details → Date → Confirm</span>
+            </div>
+            <div class="floating-pills">
+                <span class="pill gold">Warm welcome</span>
+                <span class="pill outline">Short queues</span>
+                <span class="pill outline">Concierge help</span>
+            </div>
+        </div>
+        <form method="post" class="booking-form compact">
+            <div class="form-row split">
+                <div>
+                    <label for="full_name">Full name*</label>
+                    <input type="text" name="full_name" id="full_name" required placeholder="Full name"
+                        autocomplete="name">
+                </div>
+                <div>
+                    <label for="mother_full_name">Mother's full name*</label>
+                    <input type="text" name="mother_full_name" id="mother_full_name" required
+                        placeholder="Mother's full name">
+                </div>
+            </div>
+            <div class="form-row split">
+                <div>
+                    <label for="phone">Phone number*</label>
+                    <input type="tel" name="phone" id="phone" required placeholder="+252 61 0000000" autocomplete="tel">
+                </div>
+                <div>
+                    <label for="email">Email (optional)</label>
+                    <input type="email" name="email" id="email" placeholder="you@example.com" autocomplete="email">
+                </div>
+            </div>
+            <div class="form-row split">
+                <div>
+                    <label for="district">District* (Mogadishu)</label>
+                    <select name="district" id="district" required>
+                        <option value="" disabled selected>Select your district</option>
+                        {% for d in districts %}
+                        <option value="{{ d }}">{{ d }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="date_of_birth">Date of birth*</label>
+                    <input type="date" name="date_of_birth" id="date_of_birth" required>
+                </div>
+            </div>
+            <div class="form-row split">
+                <div>
+                    <label for="national_id">National ID / Passport (optional)</label>
+                    <input type="text" name="national_id" id="national_id" placeholder="ID or passport number">
+                </div>
+                <div>
+                    <label for="preferred_time">Preferred time</label>
+                    <select name="preferred_time" id="preferred_time">
+                        <option value="" selected>Any available time</option>
+                        <option>Morning (8am - 11am)</option>
+                        <option>Midday (11am - 2pm)</option>
+                        <option>Afternoon (2pm - 5pm)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="visit_reason">Purpose of visit*</label>
+                <select name="visit_reason" id="visit_reason" required>
+                    <option selected>New ID registration</option>
+                    <option>ID replacement</option>
+                    <option>Update personal details</option>
+                    <option>Collect prepared ID</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-row header-line">
+                    <div>
+                        <label>Select your date*</label>
+                        <p class="helper">Tap a date card. When {{ daily_limit }} fill, that date closes.</p>
+                    </div>
+                    <button class="ghost-btn slim" id="refresh-availability">Refresh</button>
+                </div>
+                <input type="hidden" name="visit_date" id="visit_date" required>
+                <div class="availability-grid selection-grid" id="availability-cards">
+                    <!-- populated by JS -->
+                </div>
+                <p class="helper subtle" id="selected-date-label"></p>
+            </div>
+            <div class="form-row">
+                <label for="notes">Anything we should know?</label>
+                <textarea name="notes" id="notes" rows="3"
+                    placeholder="Accessibility needs, who accompanies you, or other context."></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="primary-btn" id="book-button">
+                    Confirm visit
+                </button>
+                <p class="helper subtle">You will see a confirmation; we may contact you if we need clarifications.</p>
+            </div>
+        </form>
+    </div>
+
+    <div class="info-grid mt-3">
+        <div class="info-card">
+            <p class="eyebrow">Arrival</p>
+            <p class="info-title">Be 10 minutes early</p>
+            <p class="helper">We keep lines short; arriving a bit early keeps your visit smooth.</p>
+        </div>
+        <div class="info-card">
+            <p class="eyebrow">Documents</p>
+            <p class="info-title">Bring current ID & proof</p>
+            <p class="helper">Carry any ID you have plus supporting papers to speed verification.</p>
+        </div>
+        <div class="info-card">
+            <p class="eyebrow">Support</p>
+            <p class="info-title">Tell us your needs</p>
+            <p class="helper">Add accessibility or timing notes; our team will prepare in advance.</p>
+        </div>
+    </div>
+
+    <div class="support-bar">
+        <div>
+            <p class="eyebrow">Need help?</p>
+            <p class="helper">Call our desk at 161 or email care@nira.gov for quick assistance.</p>
+        </div>
+        <div class="sparkle"></div>
+    </div>
+</section>
+
+<script>
+    window.initialAvailability = {{ availability_payload|tojson }};
+    window.dailyLimit = {{ daily_limit }};
+</script>
+{% endblock %}

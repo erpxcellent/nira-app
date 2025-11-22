@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if title %}
+    <title>{{ title }} · NIRA Visits</title>
+    {% else %}
+    <title>NIRA Visits</title>
+    {% endif %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/oasis.css') }}">
+</head>
+
+<body class="oasis-body">
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    {% if request.endpoint not in ['appointments.print_appointment', 'appointments.verify_appointment'] %}
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-mark">NIRA</div>
+            <div class="brand-text">
+                <span class="kicker">Welcome to oasis cancer hospital</span>
+                <span class="title">National Identification Registration Authority</span>
+            </div>
+        </div>
+        <div class="top-actions">
+            <span class="tag">{{ daily_limit if daily_limit is defined else 20 }} visits per day</span>
+            <a class="top-link" href="{{ url_for('appointments.landing') }}">Home</a>
+            <a class="top-link" href="{{ url_for('appointments.admin_login') }}">Login as admin</a>
+        </div>
+    </header>
+    {% endif %}
+    <main class="page">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-stack">
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+    {% if request.endpoint not in ['appointments.print_appointment', 'appointments.verify_appointment'] %}
+    <footer class="footer">
+        <p>Guided by the calm care of Oasis Cancer Hospital — delivering a smooth NIRA visit experience.</p>
+    </footer>
+    {% endif %}
+    <script src="{{ url_for('static', filename='js/availability.js') }}"></script>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+{% extends "admin_layout.html" %}
+{% block content %}
+<section class="page-stack container py-4">
+
+    <!-- STATUS RIBBON -->
+    <div class="status-ribbon luxe d-flex flex-wrap align-items-center justify-content-between mb-4 g-3">
+
+        <div class="stat d-flex flex-column">
+            <span class="stat-label text-uppercase small text-muted">Total</span>
+            <div>
+                <span class="stat-value fw-semibold me-2">{{ total }}</span>
+                <span class="chip">appointments</span>
+            </div>
+        </div>
+
+        <div class="stat d-flex flex-column">
+            <span class="stat-label text-uppercase small text-muted">Upcoming</span>
+            <div>
+                <span class="stat-value fw-semibold me-2">{{ upcoming }}</span>
+                <span class="chip success">open</span>
+            </div>
+        </div>
+
+        <div class="stat d-flex flex-column">
+            <span class="stat-label text-uppercase small text-muted">Today</span>
+            <div>
+                <span class="stat-value fw-semibold me-2">{{ today }}</span>
+                <span class="chip accent">today</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SLAB -->
+    <div class="form-slab glow p-3 p-md-4 p-lg-5 bg-white shadow-sm rounded-4">
+
+        <div class="slab-header mb-3">
+            <p class="eyebrow text-uppercase small text-muted mb-1">Admin dashboard</p>
+            <h1 class="h3 mb-1">Visit dates</h1>
+            <p class="lede mb-0">
+                Select a date to view its appointments. Click anywhere on a row or use the “Open” button.
+            </p>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrap mt-4">
+            <table class="admin-table table table-hover align-middle">
+
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Day</th>
+                        <th scope="col">Appointments</th>
+                        <th scope="col" class="text-end"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for d, count in date_counts %}
+                    {% set is_full = (count >= daily_limit and d >= today_date) %}
+                    <tr class="date-row {% if is_full %}text-muted disabled-row{% endif %}"
+                        data-href="{{ url_for('appointments.admin_appointments_by_date', date_str=d.isoformat()) }}">
+                        <td class="fw-semibold">{{ d.strftime('%b %d, %Y') }}</td>
+                        <td class="text-muted">{{ d.strftime('%A') }}</td>
+                        <td>
+                            <span class="badge rounded-pill px-3 {% if is_full %}bg-secondary-subtle text-secondary{% else %}bg-dark-subtle text-dark-emphasis{% endif %}">
+                                {{ count }} appointment{{ 's' if count != 1 }}
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <a class="ghost-btn slim btn btn-sm {% if is_full %}btn-secondary disabled{% else %}btn-outline-secondary{% endif %} rounded-pill px-3"
+                               {% if is_full %}tabindex="-1" aria-disabled="true"{% endif %}
+                               href="{{ url_for('appointments.admin_appointments_by_date', date_str=d.isoformat()) }}">
+                                Open
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+    // Make entire rows clickable, but keep the "Open" button working normally
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.date-row').forEach(function (row) {
+            row.addEventListener('click', function (e) {
+                if (e.target.tagName.toLowerCase() === 'a') return; // let the button work
+                const href = row.dataset.href;
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

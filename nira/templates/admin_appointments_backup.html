@@ -1,0 +1,125 @@
+{% extends "admin_layout.html" %}
+{% block content %}
+<section class="page-stack">
+    <div class="status-ribbon luxe">
+        <div class="stat">
+            <span class="stat-label">Date</span>
+            <span class="stat-value">{{ visit_date.strftime('%b %d, %Y') }}</span>
+            <span class="chip">{{ appointments|length }} appt</span>
+        </div>
+        <div class="stat right">
+            <a class="ghost-btn slim white" href="{{ url_for('appointments.admin_appointments') }}">Back to dates</a>
+        </div>
+    </div>
+
+    <div class="form-slab glow">
+        <div class="slab-header">
+            <p class="eyebrow">Appointments</p>
+            <h1>{{ visit_date.strftime('%A') }}</h1>
+            <p class="lede">Click a row to view and print the voucher.</p>
+        </div>
+        <div class="admin-layout">
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>District</th>
+                            <th>Purpose</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in appointments %}
+                        <tr data-entry='{{ {
+                            "name": a.full_name,
+                            "mother": a.mother_full_name,
+                            "phone": a.phone,
+                            "email": a.email or "",
+                            "district": a.district,
+                            "dob": a.date_of_birth.isoformat(),
+                            "visit": a.visit_date.isoformat(),
+                            "time": a.preferred_time or "Any",
+                            "reason": a.visit_reason or "N/A",
+                            "notes": a.notes or "None",
+                            "code": a.confirmation_code
+                        } | tojson | safe }}'>
+                            <td>{{ a.full_name }}</td>
+                            <td>{{ a.phone }}</td>
+                            <td>{{ a.district }}</td>
+                            <td>{{ a.visit_reason or '—' }}</td>
+                            <td><a class="ghost-btn slim" href="{{ url_for('appointments.print_appointment', code=a.confirmation_code) }}" target="_blank">Print</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="detail-card" id="detail-card">
+                <p class="eyebrow">Details</p>
+                <h3 id="detail-name">Select a row</h3>
+                <div class="detail-grid">
+                    <div><span class="dt-label">Mother</span><span class="dt-value" id="detail-mother">—</span></div>
+                    <div><span class="dt-label">Phone</span><span class="dt-value" id="detail-phone">—</span></div>
+                    <div><span class="dt-label">Email</span><span class="dt-value" id="detail-email">—</span></div>
+                    <div><span class="dt-label">District</span><span class="dt-value" id="detail-district">—</span></div>
+                    <div><span class="dt-label">DOB</span><span class="dt-value" id="detail-dob">—</span></div>
+                    <div><span class="dt-label">Preferred time</span><span class="dt-value" id="detail-time">—</span></div>
+                    <div><span class="dt-label">Purpose</span><span class="dt-value" id="detail-reason">—</span></div>
+                    <div class="notes-block">
+                        <span class="dt-label">Notes</span>
+                        <p class="dt-notes" id="detail-notes">—</p>
+                    </div>
+                </div>
+                <a class="primary-btn full" id="detail-print" href="#" target="_blank">Print voucher</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    (function () {
+        const rows = document.querySelectorAll(".admin-table tbody tr");
+        const detail = {
+            name: document.getElementById("detail-name"),
+            mother: document.getElementById("detail-mother"),
+            phone: document.getElementById("detail-phone"),
+            email: document.getElementById("detail-email"),
+            district: document.getElementById("detail-district"),
+            dob: document.getElementById("detail-dob"),
+            time: document.getElementById("detail-time"),
+            reason: document.getElementById("detail-reason"),
+            notes: document.getElementById("detail-notes"),
+            print: document.getElementById("detail-print"),
+        };
+
+        const setDetail = (entry) => {
+            detail.name.textContent = entry.name || "—";
+            detail.mother.textContent = entry.mother || "—";
+            detail.phone.textContent = entry.phone || "—";
+            detail.email.textContent = entry.email || "—";
+            detail.district.textContent = entry.district || "—";
+            detail.dob.textContent = entry.dob || "—";
+            detail.time.textContent = entry.time || "—";
+            detail.reason.textContent = entry.reason || "—";
+            detail.notes.textContent = entry.notes || "None";
+            detail.print.href = "/appointment/" + entry.code + "/print";
+        };
+
+        rows.forEach((row) => {
+            row.addEventListener("click", () => {
+                rows.forEach((r) => r.classList.remove("active"));
+                row.classList.add("active");
+                try {
+                    const data = JSON.parse(row.dataset.entry);
+                    setDetail(data);
+                } catch (e) {
+                    console.error("Failed to parse row data", e);
+                }
+            });
+        });
+
+        if (rows.length) rows[0].click();
+    })();
+</script>
+{% endblock %}***

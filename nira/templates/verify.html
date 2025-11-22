@@ -1,0 +1,50 @@
+{% extends "public_layout.html" %}
+{% block content %}
+<section class="print-wrap">
+    {% if appointment %}
+    <div class="ticket-card small verified">
+        <div class="ticket-head">
+            <div class="brand-mark">NIRA</div>
+            <div>
+                <p class="eyebrow">Verified</p>
+                <h2>{{ appointment.full_name }}</h2>
+                <p class="helper subtle">Code: {{ appointment.confirmation_code }}</p>
+            </div>
+            <div class="stamp success">Valid</div>
+        </div>
+        <div class="ticket-grid">
+            <div>
+                <span class="dt-label">Visit</span>
+                <p class="dt-value">{{ appointment.visit_date.strftime('%b %d, %Y') }}</p>
+            </div>
+            <div>
+                <span class="dt-label">District</span>
+                <p class="dt-value">{{ appointment.district }}</p>
+            </div>
+            <div>
+                <span class="dt-label">Purpose</span>
+                <p class="dt-value">{{ appointment.visit_reason or 'N/A' }}</p>
+            </div>
+            <div>
+                <span class="dt-label">Phone</span>
+                <p class="dt-value">{{ appointment.phone }}</p>
+            </div>
+        </div>
+        <p class="helper subtle accept-text">Appointment is authentic.</p>
+    </div>
+    {% else %}
+    <div class="ticket-card small invalid">
+        <div class="ticket-head">
+            <div class="brand-mark">NIRA</div>
+            <div>
+                <p class="eyebrow">Verification failed</p>
+                <h2>Not found</h2>
+                <p class="helper subtle">Code: {{ code }}</p>
+            </div>
+            <div class="stamp danger">Invalid</div>
+        </div>
+        <p class="helper">We could not find an appointment for this code. Please re-scan or contact support.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
