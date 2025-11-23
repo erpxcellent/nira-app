@@ -1,50 +1,41 @@
 {% extends "public_layout.html" %}
 {% block content %}
+{% set so = (current_lang == 'so') %}
 <section class="print-wrap">
-    {% if appointment %}
-    <div class="ticket-card small verified">
-        <div class="ticket-head">
+    <div class="print-card">
+        {% if appointment %}
+        <div class="print-head">
             <div class="brand-mark">NIRA</div>
             <div>
-                <p class="eyebrow">La xaqiijiyay</p>
-                <h2>{{ appointment.full_name }}</h2>
-                <p class="helper subtle">Koodh: {{ appointment.confirmation_code }}</p>
+                <p class="eyebrow">{{ 'Natiijada hubinta' if so else 'Verification result' }}</p>
+                <h1>{{ appointment.full_name }}</h1>
+                <p class="helper subtle">{{ ('Koodh: %s' % appointment.confirmation_code) if so else ('Code: %s' % appointment.confirmation_code) }}</p>
             </div>
-            <div class="stamp success">Ansax</div>
+            <div class="stamp success">{{ 'Ansax' if so else 'Valid' }}</div>
         </div>
-        <div class="ticket-grid">
-            <div>
-                <span class="dt-label">Taariikhda booqashada</span>
-                <p class="dt-value">{{ appointment.visit_date.strftime('%b %d, %Y') }}</p>
-            </div>
-            <div>
-                <span class="dt-label">Degmo</span>
-                <p class="dt-value">{{ appointment.district }}</p>
-            </div>
-            <div>
-                <span class="dt-label">Ujeeddo</span>
-                <p class="dt-value">{{ appointment.visit_reason or 'N/A' }}</p>
-            </div>
-            <div>
-                <span class="dt-label">Telefoon</span>
-                <p class="dt-value">{{ appointment.phone }}</p>
-            </div>
-        </div>
-        <p class="helper subtle accept-text">Ballantan waa sax oo la aqbalay.</p>
-    </div>
-    {% else %}
-    <div class="ticket-card small invalid">
-        <div class="ticket-head">
+        <dl class="print-list">
+            <dt>{{ 'Taariikhda booqashada' if so else 'Visit' }}</dt>
+            <dd>{{ appointment.visit_date.strftime('%B %d, %Y') }}</dd>
+            <dt>{{ 'Degmo' if so else 'District' }}</dt>
+            <dd>{{ appointment.district }}</dd>
+            <dt>{{ 'Ujeeddo' if so else 'Purpose' }}</dt>
+            <dd>{{ appointment.visit_reason or ('Lama sheegin' if so else 'N/A') }}</dd>
+            <dt>{{ 'Telefoon' if so else 'Phone' }}</dt>
+            <dd>{{ appointment.phone }}</dd>
+        </dl>
+        <p class="helper subtle">{{ 'Ballantan waa sax oo la aqbalay.' if so else 'Appointment is authentic.' }}</p>
+        {% else %}
+        <div class="print-head">
             <div class="brand-mark">NIRA</div>
             <div>
-                <p class="eyebrow">Xaqiijintu way guuldareysatay</p>
-                <h2>Lama helin</h2>
-                <p class="helper subtle">Koodh: {{ code }}</p>
+                <p class="eyebrow">{{ 'Natiijada hubinta' if so else 'Verification result' }}</p>
+                <h1>{{ 'Lama helin' if so else 'Not found' }}</h1>
+                <p class="helper subtle">{{ ('Koodh: %s' % code) if so else ('Code: %s' % code) }}</p>
             </div>
-            <div class="stamp danger">Aan sax ahayn</div>
+            <div class="stamp danger">{{ 'Aan sax ahayn' if so else 'Invalid' }}</div>
         </div>
-        <p class="helper">Koodhkan laguma helin ballan. Fadlan dib u iskaani ama nala soo xiriir.</p>
+        <p class="helper">{{ 'Koodhkan laguma helin ballan. Fadlan dib u iskaani ama nala soo xiriir.' if so else 'We could not find an appointment for this code. Please re-scan or contact support.' }}</p>
+        {% endif %}
     </div>
-    {% endif %}
 </section>
 {% endblock %}

@@ -10,6 +10,7 @@
         ? window.initialAvailability
         : [];
 
+    const locale = window.localeText || {};
     const monthShort = new Intl.DateTimeFormat(undefined, { month: "short" });
     const longDate = new Intl.DateTimeFormat(undefined, {
         month: "long",
@@ -29,11 +30,11 @@
 
         if (!selectedLabel) return;
         if (!dateStr) {
-            selectedLabel.textContent = "Ma jiraan taariikho bannaan hadda.";
+            selectedLabel.textContent = locale.noDates || "No dates open right now.";
             return;
         }
         const dateObj = toDate(dateStr);
-        selectedLabel.textContent = `Taariikhda la doortay: ${longDate.format(dateObj)}`;
+        selectedLabel.textContent = `${locale.selectedDate || "Selected: "} ${longDate.format(dateObj)}`;
     };
 
     const renderCards = () => {
@@ -43,7 +44,7 @@
         if (!currentAvailability.length) {
             const empty = document.createElement("p");
             empty.className = "empty-state";
-            empty.textContent = `Taariikhaha daaqaddan dhammaantood waa buuxeen (xadka waa ${dailyLimit} maalintii). Fadlan dib u soo hubi.`; 
+            empty.textContent = locale.noDates || `All dates in the current window are booked (limit ${dailyLimit} per day). Please check again soon.`;
             cardsWrap.appendChild(empty);
             setSelected(null);
             return;
@@ -82,8 +83,10 @@
             meta.className = "availability-meta";
             const spotsEl = document.createElement("span");
             spotsEl.className = "spots";
-            const plural = slot.remaining === 1 ? "boos" : "boos";
-            spotsEl.textContent = slot.remaining === 0 ? "Buuxsamay" : `${slot.remaining} ${plural} haray`;
+            const suffix = locale.spotsSuffix || "spots left";
+            spotsEl.textContent = slot.remaining === 0
+                ? (locale.fullLabel || "Full")
+                : `${slot.remaining} ${suffix}`;
             meta.appendChild(spotsEl);
 
             card.appendChild(dateBlock);

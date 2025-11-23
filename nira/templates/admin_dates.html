@@ -1,36 +1,37 @@
 {% extends "admin_layout.html" %}
 {% block content %}
+{% set so = (current_lang == 'so') %}
 <section class="page-stack container py-4">
     <div class="status-ribbon luxe d-flex flex-wrap align-items-center justify-content-between mb-4 g-3">
         <div class="stat d-flex flex-column">
-            <span class="stat-label text-uppercase small text-muted">Wadarta</span>
+            <span class="stat-label text-uppercase small text-muted">{{ 'Wadarta' if so else 'Total' }}</span>
             <div>
                 <span class="stat-value fw-semibold me-2">{{ total }}</span>
-                <span class="chip">ballan</span>
+                <span class="chip">{{ 'ballan' if so else 'appointments' }}</span>
             </div>
         </div>
         <div class="stat d-flex flex-column">
-            <span class="stat-label text-uppercase small text-muted">Kuwa soo socda</span>
+            <span class="stat-label text-uppercase small text-muted">{{ 'Kuwa soo socda' if so else 'Upcoming' }}</span>
             <div>
                 <span class="stat-value fw-semibold me-2">{{ upcoming }}</span>
-                <span class="chip success">furan</span>
+                <span class="chip success">{{ 'furan' if so else 'open' }}</span>
             </div>
         </div>
         <div class="stat d-flex flex-column">
-            <span class="stat-label text-uppercase small text-muted">Maanta</span>
+            <span class="stat-label text-uppercase small text-muted">{{ 'Maanta' if so else 'Today' }}</span>
             <div>
                 <span class="stat-value fw-semibold me-2">{{ today }}</span>
-                <span class="chip accent">maanta</span>
+                <span class="chip accent">{{ 'maanta' if so else 'today' }}</span>
             </div>
         </div>
     </div>
 
     <div class="form-slab glow p-3 p-md-4 p-lg-5 bg-white shadow-sm rounded-4">
         <div class="slab-header mb-3">
-            <p class="eyebrow text-uppercase small text-muted mb-1">Xarunta maamulka</p>
-            <h1 class="h3 mb-1">Taariikhaha booqashada</h1>
+            <p class="eyebrow text-uppercase small text-muted mb-1">{{ 'Xarunta maamulka' if so else 'Admin dashboard' }}</p>
+            <h1 class="h3 mb-1">{{ 'Taariikhaha booqashada' if so else 'Visit dates' }}</h1>
             <p class="lede mb-0">
-                Xulo taariikh si aad u aragto ballamadeeda. Guji safka ama isticmaal badhanka “Fur”.
+                {{ 'Xulo taariikh si aad u aragto ballamadeeda. Guji safka ama isticmaal badhanka "Fur".' if so else 'Select a date to view its appointments. Click a row or use the “Open” button.' }}
             </p>
         </div>
 
@@ -38,9 +39,9 @@
             <table class="admin-table table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">Taariikh</th>
-                        <th scope="col">Maalin</th>
-                        <th scope="col">Ballamo</th>
+                        <th scope="col">{{ 'Taariikh' if so else 'Date' }}</th>
+                        <th scope="col">{{ 'Maalin' if so else 'Day' }}</th>
+                        <th scope="col">{{ 'Ballamo' if so else 'Appointments' }}</th>
                         <th scope="col" class="text-end"></th>
                     </tr>
                 </thead>
@@ -48,20 +49,24 @@
                 <tbody>
                     {% for d, count in date_counts %}
                     {% set is_full = (count >= daily_limit and d >= today_date) %}
-                    <tr class="date-row {% if is_full %}text-muted disabled-row{% endif %}"
+                    {% set is_past = (d < today_date) %}
+                    <tr class="date-row {% if is_full %}text-muted disabled-row{% endif %} {% if is_past %}past-row{% endif %}"
                         data-href="{{ url_for('appointments.admin_appointments_by_date', date_str=d.isoformat()) }}">
                         <td class="fw-semibold">{{ d.strftime('%b %d, %Y') }}</td>
                         <td class="text-muted">{{ d.strftime('%A') }}</td>
                         <td>
                             <span class="badge rounded-pill px-3 {% if is_full %}bg-secondary-subtle text-secondary{% else %}bg-dark-subtle text-dark-emphasis{% endif %}">
-                                {{ count }} ballan
+                                {{ count }} {{ 'ballan' if so else 'appointments' }}
                             </span>
+                            {% if is_past %}
+                            <span class="badge rounded-pill bg-light text-muted border ms-2">{{ 'Dhacday' if so else 'Past' }}</span>
+                            {% endif %}
                         </td>
                         <td class="text-end">
                             <a class="ghost-btn slim btn btn-sm {% if is_full %}btn-secondary disabled{% else %}btn-outline-secondary{% endif %} rounded-pill px-3"
                                {% if is_full %}tabindex="-1" aria-disabled="true"{% endif %}
                                href="{{ url_for('appointments.admin_appointments_by_date', date_str=d.isoformat()) }}">
-                                Fur
+                                {{ 'Fur' if so else 'Open' }}
                             </a>
                         </td>
                     </tr>
@@ -71,6 +76,13 @@
         </div>
     </div>
 </section>
+
+<style>
+    .past-row {
+        opacity: 0.55;
+        background-color: #f1efeb !important;
+    }
+</style>
 
 <script>
     // Make entire rows clickable, but keep the "Open" button working normally

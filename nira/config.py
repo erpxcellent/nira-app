@@ -31,6 +31,8 @@ class Config:
     # Allow deployments to increase/decrease the daily capacity without code changes.
     DAILY_APPOINTMENT_LIMIT = int(os.environ.get("DAILY_APPOINTMENT_LIMIT", 20))
     BOOKING_WINDOW_DAYS = int(os.environ.get("BOOKING_WINDOW_DAYS", 30))
+    AVAILABLE_LANGS = ["so", "en"]
+    DEFAULT_LANG = os.environ.get("NIRA_DEFAULT_LANG", "so")
 
 
 

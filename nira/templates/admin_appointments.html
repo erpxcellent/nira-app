@@ -1,35 +1,35 @@
 {% extends "admin_layout.html" %}
 {% block content %}
+{% set so = (current_lang == 'so') %}
 <section class="page-stack admin-appointments-page">
 
     <div class="status-ribbon luxe">
         <div class="stat">
-            <span class="stat-label">Taariikh</span>
+            <span class="stat-label">{{ 'Taariikh' if so else 'Date' }}</span>
             <span class="stat-value">{{ visit_date.strftime('%b %d, %Y') }}
-                <span class="chip">{{ appointments|length }} ballan</span> </span>
+                <span class="chip">{{ appointments|length }} {{ 'ballan' if so else 'appointments' }}</span> </span>
         </div>
         <div class="stat right">
-            <a class="ghost-btn slim white" href="{{ url_for('appointments.admin_appointments') }}">Ku laabo taariikhaha</a>
+            <a class="ghost-btn slim white" href="{{ url_for('appointments.admin_appointments') }}">{{ 'Ku laabo taariikhaha' if so else 'Back to dates' }}</a>
         </div>
     </div>
 
     <div class="form-slab glow">
         <div class="slab-header">
-            <p class="eyebrow">Ballamaha</p>
+            <p class="eyebrow">{{ 'Ballamaha' if so else 'Appointments' }}</p>
             <h1>{{ visit_date.strftime('%A') }}</h1>
-            <p class="lede">Guji saf kasta si aad u aragto oo aad u daabacdo warqadda.</p>
+            <p class="lede">{{ 'Guji saf si aad u aragto oo u daabacdo warqadda.' if so else 'Click a row to view and print the voucher.' }}</p>
         </div>
 
         <div class="admin-layout">
-            <!-- TABLE SIDE -->
             <div class="table-wrap">
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>Magac</th>
-                            <th>Telefoon</th>
-                            <th>Degmo</th>
-                            <th>Ujeeddo</th>
+                            <th>{{ 'Magac' if so else 'Name' }}</th>
+                            <th>{{ 'Telefoon' if so else 'Phone' }}</th>
+                            <th>{{ 'Degmo' if so else 'District' }}</th>
+                            <th>{{ 'Ujeeddo' if so else 'Purpose' }}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -45,7 +45,7 @@
                             "visit": a.visit_date.isoformat(),
                             "time": a.preferred_time or "Any",
                             "reason": a.visit_reason or "N/A",
-                            "notes": a.notes or "None",
+                            "notes": a.notes or ("Lama sheegin" if so else "None"),
                             "code": a.confirmation_code
                         } | tojson | safe }}'>
                             <td class="cell-main">
@@ -57,7 +57,7 @@
                             <td class="cell-action">
                                 <a class="ghost-btn slim print-link"
                                     href="{{ url_for('appointments.print_appointment', code=a.confirmation_code) }}"
-                                    target="_blank">Daabac</a>
+                                    target="_blank">{{ 'Daabac' if so else 'Print' }}</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -65,18 +65,17 @@
                 </table>
             </div>
 
-            <!-- DETAIL SIDE -->
             <div class="detail-card" id="detail-card">
-                <p class="eyebrow">Faahfaahin</p>
-                <h3 id="detail-name">Dooro saf</h3>
+                <p class="eyebrow">{{ 'Faahfaahin' if so else 'Details' }}</p>
+                <h3 id="detail-name">{{ 'Dooro saf' if so else 'Select a row' }}</h3>
 
                 <div class="detail-grid">
                     <div>
-                        <span class="dt-label">Magaca hooyo</span>
+                        <span class="dt-label">{{ 'Magaca hooyo' if so else 'Mother' }}</span>
                         <span class="dt-value" id="detail-mother">—</span>
                     </div>
                     <div>
-                        <span class="dt-label">Telefoon</span>
+                        <span class="dt-label">{{ 'Telefoon' if so else 'Phone' }}</span>
                         <span class="dt-value" id="detail-phone">—</span>
                     </div>
                     <div>
@@ -84,35 +83,34 @@
                         <span class="dt-value" id="detail-email">—</span>
                     </div>
                     <div>
-                        <span class="dt-label">Degmo</span>
+                        <span class="dt-label">{{ 'Degmo' if so else 'District' }}</span>
                         <span class="dt-value" id="detail-district">—</span>
                     </div>
                     <div>
-                        <span class="dt-label">Dhalasho</span>
+                        <span class="dt-label">{{ 'Dhalasho' if so else 'DOB' }}</span>
                         <span class="dt-value" id="detail-dob">—</span>
                     </div>
                     <div>
-                        <span class="dt-label">Waqti la doorbido</span>
+                        <span class="dt-label">{{ 'Waqti la doorbido' if so else 'Preferred time' }}</span>
                         <span class="dt-value" id="detail-time">—</span>
                     </div>
                     <div>
-                        <span class="dt-label">Ujeeddo</span>
+                        <span class="dt-label">{{ 'Ujeeddo' if so else 'Purpose' }}</span>
                         <span class="dt-value" id="detail-reason">—</span>
                     </div>
                     <div class="notes-block">
-                        <span class="dt-label">Xusuus</span>
+                        <span class="dt-label">{{ 'Xusuus' if so else 'Notes' }}</span>
                         <p class="dt-notes" id="detail-notes">—</p>
                     </div>
                 </div>
                 <br><br>
-                <div class="">
-                    <a class="primary-btn full" id="detail-print" href="#" target="_blank">Daabac warqad</a>
+                <div>
+                    <a class="primary-btn full" id="detail-print" href="#" target="_blank">{{ 'Daabac warqad' if so else 'Print voucher' }}</a>
                 </div>
             </div>
         </div>
     </div>
 
-    {# Page-scoped styling to fix layout + make it pretty #}
     <style>
         .admin-appointments-page .admin-layout {
             display: flex;
@@ -134,7 +132,6 @@
             padding: 1.5rem 1.75rem;
         }
 
-        /* Improve table look */
         .admin-appointments-page .admin-table {
             width: 100%;
             border-collapse: separate;
@@ -174,91 +171,18 @@
             vertical-align: middle;
         }
 
-        .admin-appointments-page .cell-main .cell-title {
-            font-weight: 600;
-        }
-
-        .admin-appointments-page .cell-sub {
-            font-size: 0.85rem;
-            color: #7a7a7a;
-        }
-
-        .admin-appointments-page .cell-action {
-            text-align: right;
-            white-space: nowrap;
-        }
-
-        .admin-appointments-page .badge-pill {
+        .badge-pill {
             display: inline-block;
             padding: 0.2rem 0.65rem;
             border-radius: 999px;
             background: #262626;
             color: #f9f4ea;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .admin-appointments-page .print-link {
-            border-radius: 999px;
-            padding-inline: 1rem;
-        }
-
-        /* Detail card typography */
-        .admin-appointments-page .detail-card h3 {
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 0.9rem;
-        }
-
-        .admin-appointments-page .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.6rem 1rem;
-            font-size: 0.9rem;
-        }
-
-        .admin-appointments-page .detail-grid>.notes-block {
-            grid-column: 1 / -1;
-            margin-top: 0.4rem;
-        }
-
-        .admin-appointments-page .dt-label {
-            display: block;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: #a09786;
-            margin-bottom: 0.1rem;
-        }
-
-        .admin-appointments-page .dt-value,
-        .admin-appointments-page .dt-notes {
-            color: #343434;
-        }
-
-        .admin-appointments-page .dt-notes {
-            font-size: 0.9rem;
-            line-height: 1.35;
-        }
-
-        .admin-appointments-page .primary-btn.full {
-            margin-top: 1rem;
-        }
-
-        /* Stack nicely on small screens */
-        @media (max-width: 768px) {
-            .admin-appointments-page .admin-layout {
-                flex-direction: column;
-            }
-
-            .admin-appointments-page .detail-card {
-                width: 100%;
-            }
         }
     </style>
 </section>
 
 <script>
+    const fallbackNotes = "{{ 'Lama sheegin' if so else 'None' }}";
     (function () {
         const rows = document.querySelectorAll(".admin-table tbody tr");
         const detail = {
@@ -283,7 +207,7 @@
             detail.dob.textContent = entry.dob || "—";
             detail.time.textContent = entry.time || "—";
             detail.reason.textContent = entry.reason || "—";
-            detail.notes.textContent = entry.notes || "None";
+            detail.notes.textContent = entry.notes || fallbackNotes;
             detail.print.href = "/appointment/" + entry.code + "/print";
         };
 

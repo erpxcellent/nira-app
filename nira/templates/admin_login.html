@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/oasis.css') }}">
 </head>
 
+{% set so = (current_lang == 'so') %}
 <body class="oasis-body">
     <!-- Ambient background elements (kept as-is) -->
     <div class="ambient ambient-one"></div>
@@ -31,7 +32,7 @@
 
         <a href="{{ url_for('appointments.landing') }}" class="btn btn-light shadow-sm rounded-pill px-4 py-2 mb-3"
             style="font-weight: 600; border: 1px solid #e3d5b8;">
-            ← Ku laabo bogga dadweynaha
+            ← {{ 'Ku laabo bogga dadweynaha' if so else 'Back to public page' }}
         </a>
 
         <!-- Flash messages -->
@@ -54,8 +55,8 @@
                 <!-- Header -->
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div>
-                        <p class="eyebrow text-uppercase text-muted mb-1 small">Gelitaanka maamulka</p>
-                        <h1 class="mb-0 h4">Eeg ballamaha</h1>
+                        <p class="eyebrow text-uppercase text-muted mb-1 small">{{ 'Gelitaanka maamulka' if so else 'Admin access' }}</p>
+                        <h1 class="mb-0 h4">{{ 'Eeg ballamaha' if so else 'View appointments' }}</h1>
                     </div>
                     <div class="brand-mark d-flex align-items-center justify-content-center rounded-circle">
                         NIRA
@@ -63,25 +64,25 @@
                 </div>
 
                 <p class="text-muted small mb-4">
-                    Ku qor macluumaadka maamulka si aad u gasho guddiga ballamaha.
+                    {{ 'Ku qor macluumaadka maamulka si aad u gasho guddiga ballamaha.' if so else 'Use your admin credentials to access the appointment dashboard.' }}
                 </p>
 
                 <!-- Form -->
                 <form method="post" class="login-form">
                     <div class="mb-3">
-                        <label class="form-label" for="username">Magaca isticmaalaha</label>
+                        <label class="form-label" for="username">{{ 'Magaca isticmaalaha' if so else 'Username' }}</label>
                         <input type="text" class="form-control rounded-3" name="username" id="username" required
-                            placeholder="Magaca isticmaalaha">
+                            placeholder="{{ 'Magaca isticmaalaha' if so else 'Username' }}">
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label" for="password">Furaha sirta ah</label>
+                        <label class="form-label" for="password">{{ 'Furaha sirta ah' if so else 'Password' }}</label>
                         <input type="password" class="form-control rounded-3" name="password" id="password" required
-                            placeholder="Furaha sirta ah">
+                            placeholder="{{ 'Furaha sirta ah' if so else 'Password' }}">
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 rounded-3 py-2 primary-btn">
-                        Gali guddiga
+                        {{ 'Gali guddiga' if so else 'Enter dashboard' }}
                     </button>
                 </form>
             </div>

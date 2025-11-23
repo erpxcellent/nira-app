@@ -4,10 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% set so = (current_lang == 'so') %}
     {% if title %}
-    <title>{{ title }} · Booqashooyinka NIRA</title>
+    <title>{{ title }} · {{ 'Booqashooyinka NIRA' if so else 'NIRA Visits' }}</title>
     {% else %}
-    <title>Booqashooyinka NIRA</title>
+    <title>{{ 'Booqashooyinka NIRA' if so else 'NIRA Visits' }}</title>
     {% endif %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,13 +26,20 @@
         <div class="brand">
             <div class="brand-mark">NIRA</div>
             <div class="brand-text">
-                <span class="kicker">Ku soo dhowow Cisbitaalka Oasis</span>
-                <span class="title">Hay'adda Diiwaangelinta Aqoonsiga Qaranka</span>
+                <span class="kicker">{{ 'Ku soo dhowow Cisbitaalka Oasis' if so else 'Welcome to Oasis Cancer Hospital' }}</span>
+                <span class="title">{{ "Hay'adda Diiwaangelinta Aqoonsiga Qaranka" if so else 'National Identification Registration Authority' }}</span>
             </div>
         </div>
         <div class="top-actions">
-            <span class="tag">{{ daily_limit if daily_limit is defined else 20 }} booqasho maalintii</span>
-            <a class="top-link" href="{{ url_for('appointments.admin_login') }}"> Maamul</a>
+            <span class="tag">{{ daily_limit if daily_limit is defined else 20 }} {{ 'booqasho maalintii' if so else 'visits per day' }}</span>
+            <div class="lang-switch">
+                {% for lang in available_langs %}
+                {% if lang != current_lang %}
+                <a class="top-link" href="{{ url_for('appointments.set_language', lang_code=lang) }}">{{ 'English' if lang == 'en' else 'Af-Soomaali' }}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <a class="top-link" href="{{ url_for('appointments.admin_login') }}">{{ 'Maamul' if so else 'Admin' }}</a>
         </div>
     </header>
     {% endif %}
@@ -49,9 +57,18 @@
     </main>
     {% if request.endpoint not in ['appointments.print_appointment', 'appointments.verify_appointment'] %}
     <footer class="footer">
-        <p>Waxaan ku hagnaa daryeel deggan oo ka socda Cisbitaalka Oasis — si aanu u fududeyno khibradda booqashada NIRA.</p>
+        <p>{{ 'Waxaan ku hagnaa daryeel deggan oo ka socda Cisbitaalka Oasis — si aanu u fududeyno khibradda booqashada NIRA.' if so else 'Guided by the calm care of Oasis Cancer Hospital — delivering a smooth NIRA visit experience.' }}</p>
     </footer>
     {% endif %}
+    {% set locale_text = {
+        'selectedDate': 'Taariikhda la doortay: ' if so else 'Selected: ',
+        'noDates': 'Ma jiraan taariikho bannaan hadda.' if so else 'No dates open right now.',
+        'fullLabel': 'Buuxsamay' if so else 'Full',
+        'spotsSuffix': 'boos haray' if so else 'spots left'
+    } %}
+    <script>
+        window.localeText = {{ locale_text|tojson }};
+    </script>
     <script src="{{ url_for('static', filename='js/availability.js') }}"></script>
 </body>
 

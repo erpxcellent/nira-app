@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Maamul · NIRA</title>
+    {% set so = (current_lang == 'so') %}
+    <title>{{ 'Maamul' if so else 'Admin' }} · NIRA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -20,13 +21,20 @@
         <div class="brand">
             <div class="brand-mark">NIRA</div>
             <div class="brand-text">
-                <span class="kicker">Xarunta Maamulka</span>
-                <span class="title">Ballamaha</span>
+                <span class="kicker">{{ 'Xarunta Maamulka' if so else 'Admin dashboard' }}</span>
+                <span class="title">{{ 'Ballamaha' if so else 'Appointments' }}</span>
             </div>
         </div>
         <div class="top-actions">
-            <a class="top-link" href="{{ url_for('appointments.landing') }}">Bogga Hore</a>
-            <a class="top-link" href="{{ url_for('appointments.admin_logout') }}">Ka bax</a>
+            <div class="lang-switch">
+                {% for lang in available_langs %}
+                {% if lang != current_lang %}
+                <a class="top-link" href="{{ url_for('appointments.set_language', lang_code=lang) }}">{{ 'English' if lang == 'en' else 'Af-Soomaali' }}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <a class="top-link" href="{{ url_for('appointments.landing') }}">{{ 'Bogga Hore' if so else 'Home' }}</a>
+            <a class="top-link" href="{{ url_for('appointments.admin_logout') }}">{{ 'Ka bax' if so else 'Logout' }}</a>
         </div>
     </header>
     <main class="page">
@@ -42,7 +50,7 @@
         {% block content %}{% endblock %}
     </main>
     <footer class="footer">
-        <p>Aragtida maamulka · NIRA</p>
+        <p>{{ 'Aragtida maamulka · NIRA' if so else 'Admin view · NIRA' }}</p>
     </footer>
 </body>
 

@@ -38,6 +38,14 @@ MOGADISHU_DISTRICTS = [
 appointments_bp = Blueprint("appointments", __name__)
 
 
+def current_lang():
+    return session.get("lang", Config.DEFAULT_LANG)
+
+
+def translate_text(somali, english):
+    return somali if current_lang() == "so" else english
+
+
 def get_available_dates():
     today = date.today()
     return Appointment.availability(
@@ -93,26 +101,26 @@ def landing():
 
         validation_errors = []
         if not full_name:
-            validation_errors.append("Fadlan geli magacaaga oo buuxa si aan boos kuu diyaarinno.")
+            validation_errors.append(translate_text("Fadlan geli magacaaga oo buuxa si aan boos kuu diyaarinno.", "Please add your full name so we can reserve your slot."))
         if not mother_full_name:
-            validation_errors.append("Ku qor magaca hooyo si loo aqoonsado.")
+            validation_errors.append(translate_text("Ku qor magaca hooyo si loo aqoonsado.", "Add your mother's full name for identification."))
         if not phone:
-            validation_errors.append("Telefoon waa qasab si aan kula soo xirirno.")
+            validation_errors.append(translate_text("Telefoon waa qasab si aan kula soo xirirno.", "Phone number is required so we can reach you."))
         if not district:
-            validation_errors.append("Degmo waa in la doortaa.")
+            validation_errors.append(translate_text("Degmo waa in la doortaa.", "District is required."))
         if not date_of_birth:
-            validation_errors.append("Fadlan geli taariikhda dhalashada.")
+            validation_errors.append(translate_text("Fadlan geli taariikhda dhalashada.", "Please provide your date of birth."))
         if not visit_reason:
-            validation_errors.append("Nala wadaag ujeeddada booqashada.")
+            validation_errors.append(translate_text("Nala wadaag ujeeddada booqashada.", "Tell us your purpose to personalize support."))
         if not visit_date or visit_date not in valid_dates:
-            validation_errors.append("Taariikhdaas hadda lama heli karo. Door mid kale.")
+            validation_errors.append(translate_text("Taariikhdaas hadda lama heli karo. Door mid kale.", "That date is not available anymore. Please pick another day."))
 
         if validation_errors:
             flash(validation_errors[0], "error")
         else:
             taken = Appointment.slots_taken(visit_date)
             if taken >= limit:
-                flash("Taariikhdaas ayaa buuxsantay. Fadlan door mid kale.", "error")
+                flash(translate_text("Taariikhdaas ayaa buuxsantay. Fadlan door mid kale.", "That day just filled up. Please choose another date."), "error")
             else:
                 confirmation_code = uuid.uuid4().hex
                 appointment = Appointment(
@@ -188,10 +196,10 @@ def admin_login():
         if username == "admin" and password == "admin@123":
             session.pop("_flashes", None)
             session["admin_logged_in"] = True
-            flash("Ku soo dhowow mar kale, Maamulaha.", "success")
+            flash(translate_text("Ku soo dhowow mar kale, Maamulaha.", "Welcome back, Admin."), "success")
             return redirect(url_for("appointments.admin_appointments"))
         else:
-            flash("Magaca ama furaha waa khaldan. Fadlan isku day mar kale.", "error")
+            flash(translate_text("Magaca ama furaha waa khaldan. Fadlan isku day mar kale.", "Invalid credentials. Try again."), "error")
 
     return render_template("admin_login.html")
 
@@ -199,7 +207,7 @@ def admin_login():
 @appointments_bp.route("/admin/logout")
 def admin_logout():
     session.pop("admin_logged_in", None)
-    flash("Waad ka baxday.", "success")
+    flash(translate_text("Waad ka baxday.", "Logged out."), "success")
     return redirect(url_for("appointments.admin_login"))
 
 
@@ -235,7 +243,7 @@ def admin_appointments_by_date(date_str):
     try:
         visit_date = date.fromisoformat(date_str)
     except Exception:
-        flash("Taariikh sax ah ma ahayn.", "error")
+        flash(translate_text("Taariikh sax ah ma ahayn.", "Invalid date."), "error")
         return redirect(url_for("appointments.admin_appointments"))
 
     appointments = (
@@ -275,6 +283,13 @@ def verify_appointment():
 
 
 
+
+
+@appointments_bp.route("/set-language/<lang_code>")
+def set_language(lang_code):
+    if lang_code in Config.AVAILABLE_LANGS:
+        session["lang"] = lang_code
+    return redirect(request.referrer or url_for("appointments.landing"))
 
 
 def convert_strdate_to_datetime(str_date):

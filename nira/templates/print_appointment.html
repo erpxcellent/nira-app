@@ -1,209 +1,120 @@
 {% extends "public_layout.html" %}
 {% block content %}
-<section class="voucher-page">
-    <div class="voucher-card">
-        <header class="voucher-header">
-            <div class="voucher-brand">
-                <div class="brand-mark">NIRA</div>
-                <div class="voucher-meta">
-                    <p class="eyebrow text-uppercase mb-1">Ballan</p>
-                    <h2 class="voucher-name mb-1">{{ appointment.full_name }}</h2>
-                    <p class="helper subtle mb-0">Koodh: {{ appointment.confirmation_code }}</p>
-                </div>
+{% set so = (current_lang == 'so') %}
+<section class="print-wrap">
+    <div class="print-card">
+        <div class="print-head">
+            <div class="brand-mark">NIRA</div>
+            <div>
+                <p class="eyebrow">{{ 'Ballan' if so else 'Appointment' }}</p>
+                <h1>{{ appointment.full_name }}</h1>
+                <p class="helper subtle">{{ ('Koodh: %s' % appointment.confirmation_code) if so else ('Code: %s' % appointment.confirmation_code) }}</p>
             </div>
-            <div class="voucher-status">
-                <span class="stamp success">ANSAX</span>
-            </div>
-        </header>
+            <div class="stamp success">{{ 'Ansax' if so else 'Valid' }}</div>
+        </div>
 
-        <main class="voucher-body">
-            <div class="voucher-grid">
-                <div>
-                    <span class="dt-label">Taariikhda booqashada</span>
-                    <p class="dt-value big">{{ appointment.visit_date.strftime('%b %d, %Y') }}</p>
-                </div>
-                <div>
-                    <span class="dt-label">Ujeeddo</span>
-                    <p class="dt-value">{{ appointment.visit_reason or 'N/A' }}</p>
-                </div>
-                <div>
-                    <span class="dt-label">Waqti</span>
-                    <p class="dt-value">{{ appointment.preferred_time or 'Waqti kasta' }}</p>
-                </div>
-                <div>
-                    <span class="dt-label">Degmo</span>
-                    <p class="dt-value">{{ appointment.district }}</p>
-                </div>
-                <div>
-                    <span class="dt-label">Dhalasho</span>
-                    <p class="dt-value">{{ appointment.date_of_birth.strftime('%b %d, %Y') }}</p>
-                </div>
-                <div>
-                    <span class="dt-label">Telefoon</span>
-                    <p class="dt-value">{{ appointment.phone }}</p>
-                </div>
-                <div class="notes-block wide">
-                    <span class="dt-label">Faahfaahin</span>
-                    <p class="dt-notes mb-0">{{ appointment.notes or 'Lama sheegin' }}</p>
-                </div>
-            </div>
+        <div class="verify-block">
+            <p class="verify-text">
+                {{ 'Sawir koodhkan si aad uga xaqiijiso nidaamka NIRA.' if so else 'Scan this QR to confirm authenticity in the NIRA system.' }}
+            </p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data={{ verify_url|urlencode }}"
+                class="qr-img" alt="{{ 'Koodhka hubinta' if so else 'Verification QR code' }}">
+        </div>
 
-            <div class="voucher-qr">
-                <div class="voucher-qr-text">
-                    <p class="eyebrow text-uppercase mb-1">Hubi</p>
-                    <p class="helper mb-0">
-                        Sawir koodhkan si aad ugu xaqiijiso nidaamka NIRA.
-                    </p>
-                </div>
-                <div class="qr-img small">
-                    <img
-                        src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data={{ verify_url|urlencode }}"
-                        alt="Koodhka hubinta ballanta">
-                </div>
-            </div>
-        </main>
+        <dl class="print-list">
+            <dt>{{ 'Taariikhda booqashada' if so else 'Visit' }}</dt>
+            <dd>{{ appointment.visit_date.strftime('%B %d, %Y') }}</dd>
 
-        <footer class="voucher-actions no-print">
-            <a class="ghost-btn slim" href="{{ url_for('appointments.landing') }}">Laabo</a>
-            <button class="primary-btn" type="button" onclick="window.print()">
-                Daabac / Kaydi PDF
-            </button>
-        </footer>
+            <dt>{{ 'Ujeeddo' if so else 'Purpose' }}</dt>
+            <dd>{{ appointment.visit_reason or ('Lama sheegin' if so else 'None provided') }}</dd>
+
+            <dt>{{ 'Waqti' if so else 'Time' }}</dt>
+            <dd>{{ appointment.preferred_time or ('Waqti kasta' if so else 'Any available time') }}</dd>
+
+            <dt>{{ 'Degmo' if so else 'District' }}</dt>
+            <dd>{{ appointment.district }}</dd>
+
+            <dt>{{ 'Taariikhda dhalashada' if so else 'Date of birth' }}</dt>
+            <dd>{{ appointment.date_of_birth.strftime('%B %d, %Y') }}</dd>
+
+            <dt>{{ 'Telefoon' if so else 'Phone' }}</dt>
+            <dd>{{ appointment.phone }}</dd>
+
+            <dt>{{ 'Faahfaahin' if so else 'Notes' }}</dt>
+            <dd>{{ appointment.notes or ('Lama sheegin' if so else 'None provided') }}</dd>
+        </dl>
+
+        <div class="print-actions no-print">
+            <a class="ghost-btn slim" href="{{ url_for('appointments.landing') }}">{{ 'Laabo' if so else 'Back' }}</a>
+            <button class="primary-btn" onclick="window.print()">{{ 'Daabac / Kaydi PDF' if so else 'Print / Save PDF' }}</button>
+        </div>
     </div>
-
-    <style>
-        /* Screen layout */
-        .voucher-page {
-            min-height: calc(100vh - 4rem);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1rem;
-        }
-        .voucher-card {
-            max-width: 540px;
-            width: 100%;
-            background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
-            padding: 1.75rem 1.75rem 1.5rem;
-        }
-        .voucher-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .voucher-brand {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .brand-mark {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: #c79b3a;
-            color: #151515;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-        }
-        .voucher-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        .voucher-status .stamp.success {
-            background: #e5f6e9;
-            color: #1d7a33;
-            border-radius: 999px;
-            padding: 0.25rem 0.9rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .voucher-body {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        .voucher-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.8rem 1.5rem;
-            font-size: 0.9rem;
-        }
-        .voucher-grid .wide {
-            grid-column: 1 / -1;
-        }
-        .dt-label {
-            display: block;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #9b9384;
-            margin-bottom: 0.15rem;
-        }
-        .dt-value {
-            color: #313131;
-        }
-        .dt-value.big {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-        .dt-notes {
-            color: #4a4a4a;
-            background: #fdf7ea;
-            border-radius: 10px;
-            padding: 0.4rem 0.6rem;
-        }
-
-        .voucher-qr {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-        .voucher-qr-text {
-            flex: 1;
-            font-size: 0.85rem;
-        }
-        .qr-img.small img {
-            display: block;
-            width: 140px;
-            height: 140px;
-        }
-
-        .voucher-actions {
-            margin-top: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            gap: 0.75rem;
-        }
-
-        /* Print layout */
-        @media print {
-            body {
-                background: #ffffff !important;
-            }
-            .voucher-page {
-                padding: 0;
-            }
-            .voucher-card {
-                max-width: 100%;
-                width: 100%;
-                border-radius: 0;
-                box-shadow: none;
-                padding: 1.5cm 1.5cm 1.2cm;
-            }
-            .voucher-actions.no-print {
-                display: none !important;
-            }
-        }
-    </style>
 </section>
+
+<style>
+    .print-card {
+        max-width: 620px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 22px;
+        padding: 1.75rem 2rem;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+    }
+    .print-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+        margin-bottom: 1.25rem;
+    }
+    .verify-block {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+        padding: 1rem 0;
+        border-top: 1px solid rgba(0,0,0,0.05);
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        margin-bottom: 1rem;
+    }
+    .verify-text {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #555;
+    }
+    .qr-img {
+        width: 120px;
+        height: 120px;
+    }
+    .print-list {
+        margin: 1.25rem 0;
+        column-count: 2;
+        column-gap: 2rem;
+    }
+    .print-list dt {
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #7a7162;
+        margin-bottom: 0.15rem;
+    }
+    .print-list dd {
+        margin: 0 0 1rem;
+        font-size: 0.98rem;
+        color: #262626;
+    }
+    @media print {
+        .print-card {
+            box-shadow: none;
+            border-radius: 0;
+        }
+        .print-actions {
+            display: none !important;
+        }
+        .print-list {
+            column-count: 1;
+        }
+    }
+</style>
 {% endblock %}

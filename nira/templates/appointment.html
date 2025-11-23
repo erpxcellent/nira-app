@@ -1,161 +1,199 @@
 {% extends "public_layout.html" %}
 {% block content %}
+{% set so = (current_lang == 'so') %}
 
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
 
 <section class="page-stack container py-4">
     <div class="status-ribbon mb-3">
         <div class="stat">
-            <span class="stat-label">Xadka maalinlaha ah</span>
-            <span class="stat-value">{{ daily_limit }}
-                <span class="chip">maalintii</span></span>
+            <span class="stat-label">{{ 'Xadka maalinlaha ah' if so else 'Daily capacity' }}</span>
+            <span class="stat-value">{{ daily_limit }} <span class="chip">{{ 'maalintii' if so else 'per day'
+                    }}</span></span>
         </div>
         <div class="stat">
-            <span class="stat-label">Taariikho bannaan</span>
-            <span class="stat-value">{{ available_dates|length }}
-                <span class="chip success">Maalmood</span></span>
+            <span class="stat-label">{{ 'Taariikho bannaan' if so else 'Open dates' }}</span>
+            <span class="stat-value">{{ available_dates|length }} <span class="chip success">{{ 'maalin' if so else
+                    'Live' }}</span></span>
         </div>
         <div class="stat">
-            <span class="stat-label">Khibrad</span>
-            <span class="stat-value">Hagitaan iyo soo dhawayn</span>
+            <span class="stat-label">{{ 'Khibrad' if so else 'Experience' }}</span>
+            <span class="stat-value">{{ 'Hagitaan iyo soo dhawayn' if so else 'Personal guide and welcome' }}</span>
         </div>
     </div>
 
     <div class="form-slab glow p-3 p-md-4 rounded shadow-sm border-0 bg-white" id="booking">
         <div class="slab-header mb-3">
-            <p class="eyebrow">Booqashada NIRA</p>
-            <h1>Buuxi ballanta aqoonsiga</h1>
-            <p class="lede">Buuxi macluumaadkaaga si balan aad u qabsatid.</p>
+            <p class="eyebrow">{{ 'Booqashada NIRA' if so else 'NIRA visit' }}</p>
+            <h1>{{ 'Buuxi ballanta aqoonsiga' if so else 'Book your identification slot' }}</h1>
+            <p class="lede">
+                {{ ('Buuxi macluumaadka lagama maarmaanka ah, xulo taariikh, waxaana kugu soo dhaweyn doona daryeelka
+                deggan ee Oasis. %s qof maalintii ayaa la qaabilaa si safafku u yaraadaan.' % daily_limit)
+                if so else
+                ('Complete the essentials, pick a date, and we will welcome you with the same calm energy as Oasis
+                Cancer Hospital. %s visitors per day keeps queues minimal.' % daily_limit) }}
+            </p>
             <div class="step-line">
                 <span class="step-dot active"></span>
                 <span class="step-dot"></span>
                 <span class="step-dot"></span>
-                <span class="step-caption">Faahfaahin → Taariikh → Xaqiiji</span>
+                <span class="step-caption">{{ 'Faahfaahin → Taariikh → Xaqiiji' if so else 'Details → Date → Confirm'
+                    }}</span>
             </div>
             <div class="floating-pills">
-                <span class="pill gold">Soo dhawayn diirran</span>
-                <span class="pill outline">Safar kooban</span>
-                <span class="pill outline">Kaaliyeyaal kuu diyaarsan</span>
+                <span class="pill gold">{{ 'Soo dhawayn diirran' if so else 'Warm welcome' }}</span>
+                <span class="pill outline">{{ 'Saf kooban' if so else 'Short queues' }}</span>
+                <span class="pill outline">{{ 'Kaaliyayaal diyaar ah' if so else 'Concierge help' }}</span>
             </div>
         </div>
+
         <form method="post" class="booking-form compact">
             <div class="form-row split">
                 <div>
-                    <label for="full_name">Magaca oo dhammaystiran*</label>
-                    <input type="text" name="full_name" id="full_name" required placeholder="Magacaaga"
-                        autocomplete="name" value="{{ form_values.get('full_name','') }}">
+                    <label for="full_name">{{ 'Magaca oo dhammaystiran*' if so else 'Full name*' }}</label>
+                    <input type="text" name="full_name" id="full_name" required
+                        placeholder="{{ 'Magacaaga' if so else 'Full name' }}" autocomplete="name"
+                        value="{{ form_values.get('full_name','') }}">
                 </div>
                 <div>
-                    <label for="mother_full_name">Magaca hooyo*</label>
+                    <label for="mother_full_name">{{ 'Magaca hooyo*' if so else "Mother's full name*" }}</label>
                     <input type="text" name="mother_full_name" id="mother_full_name" required
-                        placeholder="Magaca hooyo" value="{{ form_values.get('mother_full_name','') }}">
+                        placeholder='{{ "Magaca hooyo" if so else "Mother\' s full name" }}'
+                        value="{{ form_values.get('mother_full_name','') }}">
                 </div>
             </div>
+
             <div class="form-row split">
                 <div>
-                    <label for="phone">Lambarka telefoonka*</label>
-                    <input type="tel" name="phone" id="phone" required placeholder="+252 61 0000000"
-                        autocomplete="tel" value="{{ form_values.get('phone','') }}">
+                    <label for="phone">{{ 'Lambarka telefoonka*' if so else 'Phone number*' }}</label>
+                    <input type="tel" name="phone" id="phone" required placeholder="+252 61 0000000" autocomplete="tel"
+                        value="{{ form_values.get('phone','') }}">
                 </div>
                 <div>
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" placeholder="adiga@example.com" autocomplete="email"
+                    <label for="email">{{ 'Email (ikhtiyaari)' if so else 'Email (optional)' }}</label>
+                    <input type="email" name="email" id="email"
+                        placeholder="{{ 'adiga@example.com' if so else 'you@example.com' }}" autocomplete="email"
                         value="{{ form_values.get('email','') }}">
                 </div>
             </div>
+
             <div class="form-row split">
                 <div>
-                    <label for="district">Degmada* (Muqdisho)</label>
+                    <label for="district">{{ 'Degmada* (Muqdisho)' if so else 'District* (Mogadishu)' }}</label>
                     <select name="district" id="district" required>
-                        <option value="" disabled {% if not form_values.get('district') %}selected{% endif %}>Dooro degmadaada</option>
+                        <option value="" disabled {% if not form_values.get('district') %}selected{% endif %}>{{ 'Dooro
+                            degmadaada' if so else 'Select your district' }}</option>
                         {% for d in districts %}
-                        <option value="{{ d }}" {% if form_values.get('district') == d %}selected{% endif %}>{{ d }}</option>
+                        <option value="{{ d }}" {% if form_values.get('district')==d %}selected{% endif %}>{{ d }}
+                        </option>
                         {% endfor %}
                     </select>
                 </div>
                 <div>
-                    <label for="date_of_birth">Taariikhda dhalashada*</label>
+                    <label for="date_of_birth">{{ 'Taariikhda dhalashada*' if so else 'Date of birth*' }}</label>
                     <input class="form-control datepicker active" type="text" name="date_of_birth" id="date_of_birth"
                         readonly placeholder="dd / mm / yyyy" required
                         value="{{ form_values.get('date_of_birth','') }}">
                 </div>
             </div>
+
             <div class="form-row split">
                 <div>
-                    <label for="national_id">Lambarka aqoonsiga / baasaboorka</label>
-                    <input type="text" name="national_id" id="national_id" placeholder="Lambarka aqoonsiga"
+                    <label for="national_id">{{ 'Aqoonsi / Baasaboor (ikhtiyaari)' if so else 'National ID / Passport
+                        (optional)' }}</label>
+                    <input type="text" name="national_id" id="national_id"
+                        placeholder="{{ 'Lambarka aqoonsiga' if so else 'ID or passport number' }}"
                         value="{{ form_values.get('national_id','') }}">
                 </div>
                 <div class="d-none">
-                    <label for="preferred_time">Waqtiga aad rabto</label>
+                    <label for="preferred_time">{{ 'Waqtiga aad rabto' if so else 'Preferred time' }}</label>
                     <select name="preferred_time" id="preferred_time">
-                        <option {% if form_values.get('preferred_time','Day Shift') == 'Day Shift' %}selected{% endif %}>Day Shift</option>
-                        <option disabled {% if form_values.get('preferred_time') == 'Night Shift' %}selected{% endif %}>Night Shift</option>
+                        <option {% if form_values.get('preferred_time','Day Shift')=='Day Shift' %}selected{% endif %}>
+                            Day Shift</option>
+                        <option disabled {% if form_values.get('preferred_time')=='Night Shift' %}selected{% endif %}>
+                            Night Shift</option>
                     </select>
                 </div>
             </div>
+
             <div class="form-row">
-                <label for="visit_reason">Ujeeddada booqashada*</label>
+                <label for="visit_reason">{{ 'Ujeeddada booqashada*' if so else 'Purpose of visit*' }}</label>
+                {% set reason = form_values.get('visit_reason','New ID registration') %}
                 <select name="visit_reason" id="visit_reason" required>
-                    {% set reason = form_values.get('visit_reason','New ID registration') %}
-                    <option value="New ID registration" {% if reason == 'New ID registration' %}selected{% endif %}>Diiwaangelinta aqoonsiga cusub</option>
-                    <option value="ID replacement" {% if reason == 'ID replacement' %}selected{% endif %}>Bedelidda aqoonsiga</option>
-                    <option value="Update personal details" {% if reason == 'Update personal details' %}selected{% endif %}>Cusboonaysiinta xogta</option>
-                    <option value="Collect prepared ID" {% if reason == 'Collect prepared ID' %}selected{% endif %}>Qaado aqoonsiga diyaarka ah</option>
-                    <option value="Other" {% if reason == 'Other' %}selected{% endif %}>Sabab kale</option>
+                    <option value="New ID registration" {% if reason=='New ID registration' %}selected{% endif %}>{{
+                        'Diiwaangelinta aqoonsiga cusub' if so else 'New ID registration' }}</option>
+                    <option value="ID replacement" {% if reason=='ID replacement' %}selected{% endif %}>{{ 'Bedelidda
+                        aqoonsiga' if so else 'ID replacement' }}</option>
+                    <option value="Update personal details" {% if reason=='Update personal details' %}selected{% endif
+                        %}>{{ 'Cusboonaysiinta xogta' if so else 'Update personal details' }}</option>
+                    <option value="Collect prepared ID" {% if reason=='Collect prepared ID' %}selected{% endif %}>{{
+                        'Qaado aqoonsiga diyaarka ah' if so else 'Collect prepared ID' }}</option>
+                    <option value="Other" {% if reason=='Other' %}selected{% endif %}>{{ 'Sabab kale' if so else 'Other'
+                        }}</option>
                 </select>
             </div>
+
             <div class="form-row">
                 <div class="form-row header-line">
                     <div>
-                        <label>Dooro taariikhdaada*</label>
-                        <p class="helper">Taabo kaarka taariikhda. Marka {{ daily_limit }} qof buuxaan, taariikhdu way xirmaysaa.</p>
+                        <label>{{ 'Dooro taariikhdaada*' if so else 'Select your date*' }}</label>
+                        <p class="helper">{{ 'Taabo kaarka taariikhda. Marka %s qof buuxaan, taariikhdu way xirmaysaa.'
+                            % daily_limit if so else 'Tap a date card. When %s fill, that date closes.' % daily_limit }}
+                        </p>
                     </div>
-                    <button class="ghost-btn slim" id="refresh-availability">Cusbooneysii</button>
+                    <button class="ghost-btn slim" id="refresh-availability">{{ 'Cusbooneysii' if so else 'Refresh'
+                        }}</button>
                 </div>
-                <input type="hidden" name="visit_date" id="visit_date" required value="{{ form_values.get('visit_date','') }}">
-                <div class="availability-grid selection-grid" id="availability-cards">
-                    <!-- populated by JS -->
-                </div>
+                <input type="hidden" name="visit_date" id="visit_date" required
+                    value="{{ form_values.get('visit_date','') }}">
+                <div class="availability-grid selection-grid" id="availability-cards"></div>
                 <p class="helper subtle" id="selected-date-label"></p>
             </div>
+
             <div class="form-row">
-                <label for="notes">Ma jiraan wax kale oo aan ogaano?</label>
+                <label for="notes">{{ 'Ma jiraan wax kale oo aan ogaano?' if so else 'Anything we should know?'
+                    }}</label>
                 <textarea name="notes" id="notes" rows="3"
-                    placeholder="Baahida gaarka ah, qof ku wehlinaya, iwm.">{{ form_values.get('notes','') }}</textarea>
+                    placeholder="{{ 'Baahida gaarka ah, qof ku wehlinaya, iwm.' if so else 'Accessibility needs, who accompanies you, or other context.' }}">{{ form_values.get('notes','') }}</textarea>
             </div>
+
             <div class="form-actions">
                 <button type="submit" class="primary-btn" id="book-button">
-                    Xaqiiji booqashada
+                    {{ 'Xaqiiji booqashada' if so else 'Confirm visit' }}
                 </button>
-                <p class="helper subtle">Waxaad arki doontaa xaqiijin; haddii aan u baahanno faahfaahin waxaan kula soo xiriiri doonaa.</p>
+                <p class="helper subtle">{{ 'Waxaad arki doontaa xaqiijin; haddii aan u baahanno faahfaahin waxaan kula
+                    soo xiriiri doonaa.' if so else 'You will see a confirmation; we may contact you if we need
+                    clarifications.' }}</p>
             </div>
         </form>
     </div>
 
     <div class="info-grid mt-3">
         <div class="info-card">
-            <p class="eyebrow">Imaatinka</p>
-            <p class="info-title">Soo gaar 10 daqiiqo ka hor</p>
-            <p class="helper">Safafka waa gaaban yihiin; imaatinka hore wuxuu dedejiyaa adeegga.</p>
+            <p class="eyebrow">{{ 'Imaatinka' if so else 'Arrival' }}</p>
+            <p class="info-title">{{ 'Soo gaar 10 daqiiqo ka hor' if so else 'Be 10 minutes early' }}</p>
+            <p class="helper">{{ 'Soo dhawdaha hore wuxuu ka caawiyaa in safafku gaaban yihiin.' if so else 'Arriving a
+                bit early keeps your visit smooth.' }}</p>
         </div>
         <div class="info-card">
-            <p class="eyebrow">Dukumiintiyada</p>
-            <p class="info-title">Keen aqoonsiga iyo caddeymaha</p>
-            <p class="helper">Keen wixii aqoonsi iyo waraaqo taageeraya ah si loo dedejiyo hubinta.</p>
+            <p class="eyebrow">{{ 'Dukumiintiyada' if so else 'Documents' }}</p>
+            <p class="info-title">{{ 'Keen aqoonsiga iyo caddeymaha' if so else 'Bring current ID & proof' }}</p>
+            <p class="helper">{{ 'Keen aqoonsigaaga iyo waraaqaha taageera si hubintu u dedejiso.' if so else 'Carry any
+                ID you have plus supporting papers to speed verification.' }}</p>
         </div>
         <div class="info-card">
-            <p class="eyebrow">Taageero</p>
-            <p class="info-title">Noo sheeg baahidaada</p>
-            <p class="helper">Qor baahida gaarka ah ama waqtiga aad jeceshahay; kooxdeennu way diyaar garoobi doontaa.</p>
+            <p class="eyebrow">{{ 'Taageero' if so else 'Support' }}</p>
+            <p class="info-title">{{ 'Noo sheeg baahidaada' if so else 'Tell us your needs' }}</p>
+            <p class="helper">{{ 'Qor baahida gaarka ah ama waqtiga aad jeceshahay; kooxdu way diyaar garoobi doontaa.'
+                if so else 'Add accessibility or timing notes; our team will prepare in advance.' }}</p>
         </div>
     </div>
 
     <div class="support-bar">
         <div>
-            <p class="eyebrow">Ma u baahan tahay kaalmo?</p>
-            <p class="helper">Wac 161 ama u qor care@nira.gov si degdeg ah.</p>
+            <p class="eyebrow">{{ 'Ma u baahan tahay kaalmo?' if so else 'Need help?' }}</p>
+            <p class="helper">{{ 'Wac 161 ama u qor care@nira.gov si degdeg ah.' if so else 'Call our desk at 161 or
+                email care@nira.gov for quick assistance.' }}</p>
         </div>
         <div class="sparkle"></div>
     </div>
@@ -166,7 +204,11 @@
 <script>
     $(function () {
         $(".datepicker").datepicker({
-            dateFormat: "dd/mm/yy"
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+00" // 120 years back, 10 years ahead
+
         });
     });
     window.initialAvailability = {{ availability_payload | tojson }};
