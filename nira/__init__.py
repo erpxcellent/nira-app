@@ -33,8 +33,8 @@ def create_app(config_class=Config):
     from nira.appointments import appointments_bp
     app.register_blueprint(appointments_bp)
 
-    # Ensure tables exist for simple deployments without migrations.
-    with app.app_context():
-        db.create_all()
+    # # Ensure tables exist for simple deployments without migrations.
+    # with app.app_context():
+    #     db.create_all()
 
     return app
