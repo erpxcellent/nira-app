@@ -12,12 +12,11 @@ class Config:
     
     # DATABASE CONFIGURATION
     DB_URL = "localhost"
-    DB_NAME = 'niraDB' # os.environ.get('NIRA_DB_NAME')
-    DB_USER = 'root' # os.environ.get('NIRA_DB_USER')
-    DB_PW = 'root123' # os.environ.get('NIRA_DB_PW')
+    DB_NAME = 'nira_db' # os.environ.get('NIRA_DB_NAME')
+    DB_USER = 'nira_user' # os.environ.get('NIRA_DB_USER')
+    DB_PW = 'nira_pass' # os.environ.get('NIRA_DB_PW')
 
 
-    
 
     SQLITE_DB_URI= 'sqlite:///site.db'
     POSTGRES_DB_URI = f'postgresql+psycopg2://{DB_USER}:{DB_PW}@{DB_URL}/{DB_NAME}'
