@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: nira_web
+    restart: always
+    ports:
+      - "80:8000"
+    environment:
+      FLASK_ENV: production
+      DATABASE_URL: mysql+pymysql://nira_user:nira_pass@mysql:3306/nira_db
+      DB_HOST: mysql
+      DB_NAME: nira_db
+      DB_USER: nira_user
+      DB_PW: nira_pass
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: nira_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pass
+      MYSQL_DATABASE: nira_db
+      MYSQL_USER: nira_user
+      MYSQL_PASSWORD: nira_pass
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
