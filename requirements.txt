@@ -5,3 +5,4 @@ SQLAlchemy==1.4.39
 alembic==1.8.1
 gunicorn
 PyMySQL
+Werkzeug==2.0.3
